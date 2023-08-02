@@ -18,6 +18,8 @@ public class CatalystTeraPokemonCommand {
     public static void onCommandRegistration (RegisterCommandsEvent event) {
 
         new ReloadCommand(event.getDispatcher());
+        new SetTeraTypeCommand(event.getDispatcher());
+        new TerastallizeCommand(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
 

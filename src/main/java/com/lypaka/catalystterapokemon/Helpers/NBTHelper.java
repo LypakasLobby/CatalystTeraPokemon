@@ -14,6 +14,14 @@ public class NBTHelper {
 
     }
 
+    public static int getTeraCount (Pokemon pokemon) {
+
+        int teraCount = 0;
+        if (pokemon.getPersistentData().contains("TeraCount")) teraCount = pokemon.getPersistentData().getInt("TeraCount");
+        return teraCount;
+
+    }
+
     public static void setTeraType (Pokemon pokemon, String type) {
 
         pokemon.getPersistentData().putString("TeraType", type);
@@ -39,6 +47,14 @@ public class NBTHelper {
     public static boolean isTerastallized (Pokemon pokemon) {
 
         return pokemon.getPersistentData().contains("Terastallized") && pokemon.getPersistentData().getBoolean("Terastallized");
+
+    }
+
+    public static String getTeraType (Pokemon pokemon) {
+
+        String type = "";
+        if (pokemon.getPersistentData().contains("TeraType")) type = pokemon.getPersistentData().getString("TeraType");
+        return type;
 
     }
 

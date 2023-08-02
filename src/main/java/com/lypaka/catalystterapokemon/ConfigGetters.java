@@ -18,6 +18,7 @@ public class ConfigGetters {
     public static int maxCharges;
     public static int resetCost;
     public static Map<String, List<String>> teraBlacklist;
+    public static Map<String, String> particleColors;
 
     public static void load() throws ObjectMappingException {
 
@@ -31,6 +32,7 @@ public class ConfigGetters {
         maxCharges = CatalystTeraPokemon.configManager.getConfigNode(0, "Max-Charges").getInt();
         resetCost = CatalystTeraPokemon.configManager.getConfigNode(0, "Reset-Cost").getInt();
         teraBlacklist = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Blacklist").getValue(new TypeToken<Map<String, List<String>>>() {});
+        particleColors = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Colors").getValue(new TypeToken<Map<String, String>>() {});
 
     }
 
