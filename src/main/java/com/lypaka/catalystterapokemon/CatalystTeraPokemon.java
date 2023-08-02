@@ -15,6 +15,13 @@ import java.nio.file.Paths;
 @Mod("catalystterapokemon")
 public class CatalystTeraPokemon {
 
+    /**
+     * TODO
+     *
+     * Add check for Mega/Dynamax/Z-Moves to prevent a Pokemon nuke
+     * 
+     */
+
     public static final String MOD_ID = "catalystterapokemon";
     public static final String MOD_NAME = "CatalystTeraPokemon";
     public static final Logger logger = LogManager.getLogger("CatalystTeraPokemon");
