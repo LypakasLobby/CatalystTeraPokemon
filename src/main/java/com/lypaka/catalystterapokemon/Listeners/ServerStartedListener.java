@@ -1,6 +1,7 @@
 package com.lypaka.catalystterapokemon.Listeners;
 
 import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
+import com.lypaka.catalystterapokemon.Helpers.MiscHelpers;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,6 +14,9 @@ public class ServerStartedListener {
     public static void onServerStarted (FMLServerStartedEvent event) {
 
         Pixelmon.EVENT_BUS.register(new PixelmonUpdateListener());
+
+        MiscHelpers.setRibbonData();
+        MiscHelpers.loadRibbon();
 
     }
 

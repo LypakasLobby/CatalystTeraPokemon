@@ -19,7 +19,7 @@ public class CatalystTeraPokemon {
      * TODO
      *
      * Add check for Mega/Dynamax/Z-Moves to prevent a Pokemon nuke
-     * 
+     *
      */
 
     public static final String MOD_ID = "catalystterapokemon";
