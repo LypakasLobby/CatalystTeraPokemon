@@ -1,6 +1,7 @@
 package com.lypaka.catalystterapokemon.Listeners;
 
 import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
+import com.lypaka.catalystterapokemon.Helpers.DamageHelpers;
 import com.lypaka.catalystterapokemon.Helpers.MiscHelpers;
 import com.pixelmonmod.pixelmon.Pixelmon;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,6 +18,7 @@ public class ServerStartedListener {
 
         MiscHelpers.setRibbonData();
         MiscHelpers.loadRibbon();
+        DamageHelpers.loadTypeEffectivenessMaps();
 
     }
 
