@@ -13,6 +13,18 @@ public class DamageHelpers {
     public static Map<String, List<Element>> susceptibleTypes = new HashMap<>(); // Moves that would be super effective against the Tera type
     public static Map<String, List<Element>> immuneTypes = new HashMap<>(); // Moves that would just not hit the Tera type due to now being immune (Normal -> Ghost)
 
+    public static boolean dealsNotVeryEffectiveDamage (String teraType, Attack attack) {
+
+        boolean notVeryEffective = false;
+        List<Element> susceptible = resistedTypes.get(teraType);
+        Element attackType = attack.getActualType();
+
+        if (susceptible.contains(attackType)) notVeryEffective = true;
+
+        return notVeryEffective;
+
+    }
+
     public static boolean dealsSuperEffectiveDamage (String teraType, Attack attack) {
 
         boolean superEffective = false;

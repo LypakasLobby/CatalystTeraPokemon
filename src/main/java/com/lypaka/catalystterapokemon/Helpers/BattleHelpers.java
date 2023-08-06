@@ -6,14 +6,33 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipan
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class BattleHelpers {
 
     public static List<TeraBattle> teraBattles = new ArrayList<>();
+    public static Map<BattleController, UUID> battleMap = new HashMap<>(); // used to clear Tera Battle object on battle end
 
-    public static TeraBattle getTeraBattle (ServerPlayerEntity player) {
+    public static TeraBattle getTeraBattleFromBattleController (BattleController bc) {
+
+        UUID battleUUID = battleMap.getOrDefault(bc, null);
+        if (battleUUID == null) return null;
+        for (TeraBattle tb : teraBattles) {
+
+            UUID uuid = tb.getUUID();
+            if (uuid.toString().equalsIgnoreCase(battleUUID.toString())) {
+
+                return tb;
+
+            }
+
+        }
+
+        return null;
+
+    }
+
+    public static TeraBattle getTeraBattleFromPlayer (ServerPlayerEntity player) {
 
         for (TeraBattle tb : teraBattles) {
 

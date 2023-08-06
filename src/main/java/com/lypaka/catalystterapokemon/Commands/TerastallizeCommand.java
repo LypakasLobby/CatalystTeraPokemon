@@ -18,6 +18,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TerastallizeCommand {
 
@@ -59,12 +60,14 @@ public class TerastallizeCommand {
                                                                                 BattleController bc = BattleRegistry.getBattle(player);
                                                                                 if (bc.getStage() == BattleStage.PICKACTION) {
 
-                                                                                    TeraBattle teraBattle = BattleHelpers.getTeraBattle(player);
+                                                                                    TeraBattle teraBattle = BattleHelpers.getTeraBattleFromPlayer(player);
                                                                                     if (teraBattle == null) {
 
                                                                                         List<Pokemon> toTera = new ArrayList<>();
+                                                                                        UUID uuid = UUID.randomUUID();
+                                                                                        BattleHelpers.battleMap.put(bc, uuid);
                                                                                         toTera.add(pokemon);
-                                                                                        teraBattle = new TeraBattle(bc, toTera);
+                                                                                        teraBattle = new TeraBattle(bc, uuid, toTera);
                                                                                         BattleHelpers.teraBattles.add(teraBattle);
 
                                                                                     } else {

@@ -14,6 +14,8 @@ public class ServerStartedListener {
     @SubscribeEvent
     public static void onServerStarted (FMLServerStartedEvent event) {
 
+        Pixelmon.EVENT_BUS.register(new BattleEndListener());
+        Pixelmon.EVENT_BUS.register(new DamageListeners());
         Pixelmon.EVENT_BUS.register(new PixelmonUpdateListener());
 
         MiscHelpers.setRibbonData();
