@@ -8,7 +8,7 @@ public class ParticleHelpers {
 
     public static RedstoneParticleData getParticleColorForTera (Pokemon pokemon) {
 
-        String teraType = NBTHelper.getTeraType(pokemon);
+        String teraType = NBTHelpers.getTeraType(pokemon);
         RedstoneParticleData data = null;
         if (ConfigGetters.particleColors.containsKey(teraType)) {
 

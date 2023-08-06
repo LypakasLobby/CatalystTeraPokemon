@@ -1,13 +1,10 @@
 package com.lypaka.catalystterapokemon.Listeners;
 
 import com.lypaka.catalystterapokemon.Helpers.MiscHelpers;
-import com.lypaka.catalystterapokemon.Helpers.NBTHelper;
+import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.catalystterapokemon.Helpers.ParticleHelpers;
 import com.pixelmonmod.pixelmon.api.events.PixelmonUpdateEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
-import com.pixelmonmod.pixelmon.api.pokemon.ribbon.Ribbon;
-import com.pixelmonmod.pixelmon.api.pokemon.ribbon.RibbonRegistry;
-import com.pixelmonmod.pixelmon.api.registries.PixelmonSpecies;
 import com.pixelmonmod.pixelmon.api.util.helpers.RandomHelper;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import com.pixelmonmod.pixelmon.enums.EnumGrowth;
@@ -29,7 +26,7 @@ public class PixelmonUpdateListener {
         World world = pixelmon.world;
         Random rand = RandomHelper.getRandom();
         
-        if (NBTHelper.isTerastallized(pokemon)) {
+        if (NBTHelpers.isTerastallized(pokemon)) {
 
             if (world instanceof ServerWorld) {
 

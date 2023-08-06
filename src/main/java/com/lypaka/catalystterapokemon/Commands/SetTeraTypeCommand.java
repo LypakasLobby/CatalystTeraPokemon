@@ -1,7 +1,7 @@
 package com.lypaka.catalystterapokemon.Commands;
 
 import com.lypaka.catalystterapokemon.ConfigGetters;
-import com.lypaka.catalystterapokemon.Helpers.NBTHelper;
+import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.lypakautils.FancyText;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
@@ -48,7 +48,7 @@ public class SetTeraTypeCommand {
 
                                                                                     } else {
 
-                                                                                        NBTHelper.setTeraType(pokemon, type);
+                                                                                        NBTHelpers.setTeraType(pokemon, type);
                                                                                         player.sendMessage(FancyText.getFormattedText("&aSuccessfully set " + pokemon.getSpecies().getName() + "'s Tera Type to " + type + "!"), player.getUniqueID());
                                                                                         return 1;
 
