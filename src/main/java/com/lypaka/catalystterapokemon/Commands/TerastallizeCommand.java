@@ -1,5 +1,6 @@
 package com.lypaka.catalystterapokemon.Commands;
 
+import com.lypaka.catalystterapokemon.API.TerastallizeEvent;
 import com.lypaka.catalystterapokemon.ConfigGetters;
 import com.lypaka.catalystterapokemon.Helpers.BattleHelpers;
 import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
@@ -13,11 +14,11 @@ import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
-import com.pixelmonmod.pixelmon.battles.controller.BattleStage;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,6 +60,13 @@ public class TerastallizeCommand {
 
                                                                     } else {
 
+                                                                        if (!BattleHelpers.canPokemonTera(pokemon)) {
+
+                                                                            player.sendMessage(FancyText.getFormattedText("&cThis Pokemon is currently incapable of Terastallizing due to one of the following reasons:"), player.getUniqueID());
+                                                                            player.sendMessage(FancyText.getFormattedText("&eHolding Mega Stone/Z-Crystal, is Rayquaza with Dragon Ascent, or is Dynamaxed/GMax"), player.getUniqueID());
+                                                                            return 0;
+
+                                                                        }
                                                                         String teraType = NBTHelpers.getTeraType(pokemon);
                                                                         if (teraType.equalsIgnoreCase("")) {
 
@@ -67,57 +75,62 @@ public class TerastallizeCommand {
 
                                                                         } else {
 
-                                                                            if (BattleRegistry.getBattle(player) != null) {
+                                                                            TerastallizeEvent teraEvent = new TerastallizeEvent(player, pokemon);
+                                                                            MinecraftForge.EVENT_BUS.post(teraEvent);
+                                                                            if (!teraEvent.isCanceled()) {
 
-                                                                                BattleController bc = BattleRegistry.getBattle(player);
-                                                                                TeraBattle teraBattle = BattleHelpers.getTeraBattleFromPlayer(player);
-                                                                                if (teraBattle == null) {
+                                                                                if (BattleRegistry.getBattle(player) != null) {
 
-                                                                                    List<Pokemon> toTera = new ArrayList<>();
-                                                                                    List<Pokemon> alreadyTera = new ArrayList<>();
-                                                                                    UUID uuid = UUID.randomUUID();
-                                                                                    BattleHelpers.battleMap.put(bc, uuid);
-                                                                                    toTera.add(pokemon);
-                                                                                    teraBattle = new TeraBattle(bc, uuid, toTera, alreadyTera);
-                                                                                    BattleHelpers.teraBattles.add(teraBattle);
+                                                                                    BattleController bc = BattleRegistry.getBattle(player);
+                                                                                    TeraBattle teraBattle = BattleHelpers.getTeraBattleFromPlayer(player);
+                                                                                    if (teraBattle == null) {
 
-                                                                                } else {
+                                                                                        List<Pokemon> toTera = new ArrayList<>();
+                                                                                        List<Pokemon> alreadyTera = new ArrayList<>();
+                                                                                        UUID uuid = UUID.randomUUID();
+                                                                                        BattleHelpers.battleMap.put(bc, uuid);
+                                                                                        toTera.add(pokemon);
+                                                                                        teraBattle = new TeraBattle(bc, uuid, toTera, alreadyTera);
+                                                                                        BattleHelpers.teraBattles.add(teraBattle);
 
-                                                                                    List<Pokemon> toTera = teraBattle.getPokemonToTera();
-                                                                                    for (Pokemon p : toTera) {
+                                                                                    } else {
 
-                                                                                        if (p.getOwnerPlayerUUID().toString().equalsIgnoreCase(player.getUniqueID().toString())) {
+                                                                                        List<Pokemon> toTera = teraBattle.getPokemonToTera();
+                                                                                        for (Pokemon p : toTera) {
 
-                                                                                            player.sendMessage(FancyText.getFormattedText("&cYou've already Tera'd this battle!"), player.getUniqueID());
-                                                                                            return 1;
+                                                                                            if (p.getOwnerPlayerUUID().toString().equalsIgnoreCase(player.getUniqueID().toString())) {
 
-                                                                                        }
+                                                                                                player.sendMessage(FancyText.getFormattedText("&cYou've already Tera'd this battle!"), player.getUniqueID());
+                                                                                                return 1;
 
-                                                                                    }
-                                                                                    List<Pokemon> alreadyTera = teraBattle.getAlreadyTera();
-                                                                                    for (Pokemon p : alreadyTera) {
-
-                                                                                        if (p.getOwnerPlayerUUID().toString().equalsIgnoreCase(player.getUniqueID().toString())) {
-
-                                                                                            player.sendMessage(FancyText.getFormattedText("&cYou've already Tera'd this battle!"), player.getUniqueID());
-                                                                                            return 1;
+                                                                                            }
 
                                                                                         }
+                                                                                        List<Pokemon> alreadyTera = teraBattle.getAlreadyTera();
+                                                                                        for (Pokemon p : alreadyTera) {
+
+                                                                                            if (p.getOwnerPlayerUUID().toString().equalsIgnoreCase(player.getUniqueID().toString())) {
+
+                                                                                                player.sendMessage(FancyText.getFormattedText("&cYou've already Tera'd this battle!"), player.getUniqueID());
+                                                                                                return 1;
+
+                                                                                            }
+
+                                                                                        }
+                                                                                        toTera.add(pokemon);
 
                                                                                     }
-                                                                                    toTera.add(pokemon);
+
+                                                                                    return 1;
+
+                                                                                } else if (ConfigGetters.allowOutsideTera) {
+
+                                                                                    NBTHelpers.setTerastallized(pokemon, true);
+                                                                                    player.sendMessage(FancyText.getFormattedText("&a" + pokemon.getSpecies().getName() + " has Terastallized into the " + teraType + " Tera Type!"), player.getUniqueID());
 
                                                                                 }
 
-                                                                                return 1;
-
-                                                                            } else if (ConfigGetters.allowOutsideTera) {
-
-                                                                                NBTHelpers.setTerastallized(pokemon, true);
-                                                                                player.sendMessage(FancyText.getFormattedText("&a" + pokemon.getSpecies().getName() + " has Terastallized into the " + teraType + " Tera Type!"), player.getUniqueID());
-
                                                                             }
-
 
                                                                         }
 

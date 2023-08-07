@@ -25,6 +25,7 @@ public class NBTHelpers {
     public static void setTeraType (Pokemon pokemon, String type) {
 
         pokemon.getPersistentData().putString("TeraType", type);
+        addTeraCount(pokemon);
 
     }
 

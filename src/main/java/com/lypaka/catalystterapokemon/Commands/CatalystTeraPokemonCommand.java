@@ -17,6 +17,8 @@ public class CatalystTeraPokemonCommand {
     @SubscribeEvent
     public static void onCommandRegistration (RegisterCommandsEvent event) {
 
+        new GiveShardCommand(event.getDispatcher());
+        new MenuCommand(event.getDispatcher());
         new ReloadCommand(event.getDispatcher());
         new SetTeraTypeCommand(event.getDispatcher());
         new TerastallizeCommand(event.getDispatcher());

@@ -9,6 +9,8 @@ import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.attacks.Effectiveness;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.List;
+
 public class DamageListeners {
 
     @SubscribeEvent
@@ -49,11 +51,29 @@ public class DamageListeners {
         Pokemon pokemon = event.user.pokemon;
         if (NBTHelpers.isTerastallized(pokemon)) {
 
+            String teraType = NBTHelpers.getTeraType(pokemon);
+            List<Element> originalTypes = pokemon.getForm().getTypes();
             Element attackType = event.user.attack.getActualType();
-            if (attackType.getName().equalsIgnoreCase(NBTHelpers.getTeraType(pokemon))) {
+            if (attackType.getName().equalsIgnoreCase(teraType)) {
 
+                double stab = 1.5;
                 event.setStabbing(true);
-                event.stabMultiplier = 2.0;
+                for (Element ele : originalTypes) {
+
+                    if (ele.getName().equalsIgnoreCase(teraType)) {
+
+                        stab = 2.0;
+                        break;
+
+                    }
+
+                }
+                if (pokemon.getAbility().getName().equalsIgnoreCase("Adaptability")) {
+
+                    stab = 2.25;
+
+                }
+                event.stabMultiplier = stab;
 
             }
 

@@ -2,6 +2,9 @@ package com.lypaka.catalystterapokemon.Commands;
 
 import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
 import com.lypaka.catalystterapokemon.ConfigGetters;
+import com.lypaka.catalystterapokemon.Helpers.DamageHelpers;
+import com.lypaka.catalystterapokemon.Helpers.MiscHelpers;
+import com.lypaka.catalystterapokemon.TeraItems.TeraItemUtils;
 import com.lypaka.lypakautils.FancyText;
 import com.lypaka.lypakautils.MiscHandlers.PermissionHandler;
 import com.mojang.brigadier.CommandDispatcher;
@@ -38,6 +41,10 @@ public class ReloadCommand {
 
                                                     CatalystTeraPokemon.configManager.load();
                                                     ConfigGetters.load();
+                                                    MiscHelpers.setRibbonData();
+                                                    MiscHelpers.loadRibbon();
+                                                    DamageHelpers.loadTypeEffectivenessMaps();
+                                                    TeraItemUtils.loadShards();
                                                     c.getSource().sendFeedback(FancyText.getFormattedText("&aSuccessfully reloaded CatalystTeraPokemon configuration!"), true);
                                                     return 1;
 

@@ -9,18 +9,16 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-        classpath 'gradle.plugin.com.github.jengelman.gradle.plugins:shadow:7.0.0'
     }
 }
 
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'com.lypaka'
-version = 'useless'
+version = '1.0.0-ALPHA'
 
 java {
-    archivesBaseName = 'CatalystTeraPokemon-base'
+    archivesBaseName = 'CatalystTeraPokemon'
     toolchain.languageVersion = JavaLanguageVersion.of(8)
 }
 
@@ -123,8 +121,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.16.5-36.2.39'
     compileOnly fileTree(dir: 'C:\\Users\\ryan9\\Documents\\GitHub\\LIBRARIES', include: ['LypakaUtils-1.16.5.jar'])
     compileOnly fileTree(dir: 'C:\\Users\\ryan9\\Documents\\GitHub\\LIBRARIES', include: ['Reforged.jar'])
-
-    shadow group: 'net.objecthunter', name: 'exp4j', version: '0.4.4'
+    compileOnly fileTree(dir: 'C:\\Users\\ryan9\\Documents\\GitHub\\LIBRARIES', include: ['GooeyLibs-1.16.5.jar'])
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
@@ -140,18 +137,6 @@ jar {
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-}
-
-shadowJar {
-    configurations = [project.configurations.shadow]
-    archiveName = 'CatalystTeraPokemon-0.0.5-ALPHA.jar'
-
-
-    exclude "**/module-info.class"
-}
-
-reobf {
-    shadowJar {}
 }
 
 jar.finalizedBy('reobfJar')

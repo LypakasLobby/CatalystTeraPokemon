@@ -1,9 +1,12 @@
 package com.lypaka.catalystterapokemon.Helpers;
 
 import com.lypaka.catalystterapokemon.TeraBattle;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
+import com.pixelmonmod.pixelmon.items.heldItems.MegaStoneItem;
+import com.pixelmonmod.pixelmon.items.heldItems.ZCrystalItem;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
 import java.util.*;
@@ -53,6 +56,31 @@ public class BattleHelpers {
         }
 
         return null;
+
+    }
+
+    public static boolean canPokemonTera (Pokemon pokemon) {
+
+        if (pokemon.getHeldItemAsItemHeld() instanceof MegaStoneItem) return false;
+        if (pokemon.getHeldItemAsItemHeld() instanceof ZCrystalItem) return false;
+
+        for (int i = 0; i < 4; i++) {
+
+            String move = pokemon.getMoveset().attacks[i].getActualMove().getAttackName();
+            if (move.contains("Max")) return false; // Pokemon is Dynamaxed/GMaxed
+            if (move.equalsIgnoreCase("Dragon Ascent") || move.equalsIgnoreCase("DragonAscent")) {
+
+                if (pokemon.getSpecies().getName().equalsIgnoreCase("Rayquaza")) {
+
+                    return false;
+
+                }
+
+            }
+
+        }
+
+        return true;
 
     }
 

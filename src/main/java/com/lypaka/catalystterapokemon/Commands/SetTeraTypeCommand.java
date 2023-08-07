@@ -3,6 +3,7 @@ package com.lypaka.catalystterapokemon.Commands;
 import com.lypaka.catalystterapokemon.ConfigGetters;
 import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.lypakautils.FancyText;
+import com.lypaka.lypakautils.MiscHandlers.PermissionHandler;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -41,6 +42,12 @@ public class SetTeraTypeCommand {
                                                                                 if (c.getSource().getEntity() instanceof ServerPlayerEntity) {
 
                                                                                     ServerPlayerEntity player = (ServerPlayerEntity) c.getSource().getEntity();
+                                                                                    if (!PermissionHandler.hasPermission(player, "catalystterapokemon.command.admin")) {
+
+                                                                                        player.sendMessage(FancyText.getFormattedText("&cYou don't have permission to use this command!"), player.getUniqueID());
+                                                                                        return 1;
+
+                                                                                    }
                                                                                     int slot = IntegerArgumentType.getInteger(c, "slot") - 1;
                                                                                     String type = NBTHelpers.getProperName(StringArgumentType.getString(c, "type"));
                                                                                     PlayerPartyStorage storage = StorageProxy.getParty(player);

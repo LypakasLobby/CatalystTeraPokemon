@@ -18,8 +18,6 @@ public class CatalystTeraPokemon {
     /**
      * TODO
      *
-     * Add check for Mega/Dynamax/Z-Moves to prevent a Pokemon nuke
-     *
      */
 
     public static final String MOD_ID = "catalystterapokemon";
@@ -30,7 +28,7 @@ public class CatalystTeraPokemon {
     public CatalystTeraPokemon() throws IOException, ObjectMappingException {
 
         Path dir = ConfigUtils.checkDir(Paths.get("./config/catalystterapokemon"));
-        String[] files = new String[]{"catalystterapokemon.conf"};
+        String[] files = new String[]{"catalystterapokemon.conf", "items.conf", "storage.conf"};
         configManager = new BasicConfigManager(files, dir, CatalystTeraPokemon.class, MOD_NAME, MOD_ID, logger);
         configManager.init();
         ConfigGetters.load();
