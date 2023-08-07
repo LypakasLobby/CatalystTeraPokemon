@@ -47,9 +47,6 @@ public class PixelmonUpdateListener {
                 RedstoneParticleData data = ParticleHelpers.getParticleColorForTera(pokemon);
                 if (data == null) return;
 
-                pokemon.addRibbon(MiscHelpers.teraRibbon, true);
-//                pokemon.setDisplayedRibbon(Ribbon.builder().type(RibbonRegistry.SPECIAL.getValueUnsafe()).ribbonData(MiscHelpers.ribbonData).build());
-
                 int i;
                 // I like being able to read my lines, thank you
                 if (pokemon.getGrowth() == EnumGrowth.Enormous) {

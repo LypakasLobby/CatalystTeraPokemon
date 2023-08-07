@@ -41,6 +41,15 @@ public class NBTHelpers {
     public static void setTerastallized (Pokemon pokemon, boolean value) {
 
         pokemon.getPersistentData().putBoolean("Terastallized", value);
+        if (value) {
+
+            pokemon.addRibbon(MiscHelpers.teraRibbon, true);
+
+        } else {
+
+            pokemon.removeRibbon(MiscHelpers.teraRibbon);
+
+        }
 
     }
 
@@ -55,6 +64,12 @@ public class NBTHelpers {
         String type = "";
         if (pokemon.getPersistentData().contains("TeraType")) type = pokemon.getPersistentData().getString("TeraType");
         return type;
+
+    }
+
+    public static String getProperName (String teraType) {
+
+        return teraType.substring(0, 1).toUpperCase() + teraType.substring(1);
 
     }
 

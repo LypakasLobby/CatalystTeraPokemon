@@ -11,12 +11,14 @@ public class TeraBattle {
     private final BattleController bc;
     private final UUID uuid;
     private List<Pokemon> toTera;
+    private List<Pokemon> alreadyTera;
 
-    public TeraBattle (BattleController bc, UUID uuid, List<Pokemon> toTera) {
+    public TeraBattle (BattleController bc, UUID uuid, List<Pokemon> toTera, List<Pokemon> alreadyTera) {
 
         this.bc = bc;
         this.uuid = uuid;
         this.toTera = toTera;
+        this.alreadyTera = alreadyTera;
 
     }
 
@@ -41,6 +43,18 @@ public class TeraBattle {
     public void setPokemonToTera (List<Pokemon> toTera) {
 
         this.toTera = toTera;
+
+    }
+
+    public List<Pokemon> getAlreadyTera() {
+
+        return this.alreadyTera;
+
+    }
+
+    public void setAlreadyTera (List<Pokemon> alreadyTera) {
+
+        this.alreadyTera = alreadyTera;
 
     }
 

@@ -15,9 +15,12 @@ import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
 import net.minecraft.entity.player.ServerPlayerEntity;
 
+import java.util.Arrays;
+
 public class SetTeraTypeCommand {
 
     private static SuggestionProvider<CommandSource> TYPES = (context, builder) -> ISuggestionProvider.suggest(ConfigGetters.particleColors.keySet(), builder);
+    private static SuggestionProvider<CommandSource> SLOTS = (context, builder) -> ISuggestionProvider.suggest(Arrays.asList("1", "2", "3", "4", "5", "6"), builder);
 
     public SetTeraTypeCommand (CommandDispatcher<CommandSource> dispatcher) {
 
@@ -29,6 +32,7 @@ public class SetTeraTypeCommand {
                                     Commands.literal("set")
                                             .then(
                                                     Commands.argument("slot", IntegerArgumentType.integer(1, 6))
+                                                            .suggests(SLOTS)
                                                             .then(
                                                                     Commands.argument("type", StringArgumentType.string())
                                                                             .suggests(TYPES)
@@ -38,7 +42,7 @@ public class SetTeraTypeCommand {
 
                                                                                     ServerPlayerEntity player = (ServerPlayerEntity) c.getSource().getEntity();
                                                                                     int slot = IntegerArgumentType.getInteger(c, "slot") - 1;
-                                                                                    String type = StringArgumentType.getString(c, "type");
+                                                                                    String type = NBTHelpers.getProperName(StringArgumentType.getString(c, "type"));
                                                                                     PlayerPartyStorage storage = StorageProxy.getParty(player);
                                                                                     Pokemon pokemon = storage.get(slot);
                                                                                     if (pokemon == null) {

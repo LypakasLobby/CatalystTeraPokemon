@@ -24,42 +24,55 @@ import java.util.List;
 @Mod.EventBusSubscriber(modid = CatalystTeraPokemon.MOD_ID)
 public class TickListener {
 
+    private static int count = -1;
+
     @SubscribeEvent
     public static void onTick (TickEvent.ServerTickEvent event) {
 
         if (BattleHelpers.teraBattles.isEmpty()) return;
 
-        for (TeraBattle tb : BattleHelpers.teraBattles) {
+        count++;
+        if (count == 10) {
 
-            BattleController bc = tb.getBattleController();
-            if (bc.getStage() == BattleStage.DOACTION) {
+            count = -1;
+            for (TeraBattle tb : BattleHelpers.teraBattles) {
 
-                List<Pokemon> toTera = tb.getPokemonToTera();
-                for (Pokemon p : toTera) {
+                BattleController bc = tb.getBattleController();
+                if (bc.getStage() == BattleStage.DOACTION) {
 
-                    if (!NBTHelpers.isTerastallized(p)) {
+                    List<Pokemon> toTera = tb.getPokemonToTera();
+                    toTera.removeIf(p -> {
 
-                        String teraType = NBTHelpers.getTeraType(p);
-                        NBTHelpers.setTerastallized(p, true);
-                        List<BattleParticipant> participants = bc.participants;
-                        for (BattleParticipant bp : participants) {
+                        if (!NBTHelpers.isTerastallized(p)) {
 
-                            if (bp instanceof PlayerParticipant) {
+                            CatalystTeraPokemon.logger.info("Tera-ing " + p.getOwnerPlayer().getName().getString() + "'s " + p.getSpecies().getName());
+                            String teraType = NBTHelpers.getTeraType(p);
+                            NBTHelpers.setTerastallized(p, true);
+                            List<BattleParticipant> participants = bc.participants;
+                            for (BattleParticipant bp : participants) {
 
-                                PlayerParticipant pp = (PlayerParticipant) bp;
-                                ServerPlayerEntity player = pp.player;
-                                player.sendMessage(FancyText.getFormattedText("&a" + p.getSpecies().getName() + " has Terastallized into the " + teraType + " Tera Type!"), player.getUniqueID());
+                                if (bp instanceof PlayerParticipant) {
+
+                                    PlayerParticipant pp = (PlayerParticipant) bp;
+                                    ServerPlayerEntity player = pp.player;
+                                    player.sendMessage(FancyText.getFormattedText("&a" + p.getSpecies().getName() + " has Terastallized into the " + teraType + " Tera Type!"), player.getUniqueID());
+
+                                }
 
                             }
+                            for (Spectator spectator : bc.spectators) {
+
+                                spectator.getEntity().sendMessage(FancyText.getFormattedText("&a" + p.getSpecies().getName() + " has Terastallized into the " + teraType + " Tera Type!"), spectator.getEntity().getUniqueID());
+
+                            }
+                            tb.getAlreadyTera().add(p);
+                            return true;
 
                         }
-                        for (Spectator spectator : bc.spectators) {
 
-                            spectator.getEntity().sendMessage(FancyText.getFormattedText("&a" + p.getSpecies().getName() + " has Terastallized into the " + teraType + " Tera Type!"), spectator.getEntity().getUniqueID());
+                        return false;
 
-                        }
-
-                    }
+                    });
 
                 }
 
