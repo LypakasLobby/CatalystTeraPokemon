@@ -1,7 +1,7 @@
 package com.lypaka.catalystterapokemon.Listeners;
 
 import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
-import com.pixelmonmod.pixelmon.api.events.BattleStartedEvent;
+import com.pixelmonmod.pixelmon.api.events.battles.BattleStartedEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
@@ -16,7 +16,7 @@ public class BattleStartListener {
     @SubscribeEvent
     public void onBattleStart (BattleStartedEvent event) {
 
-        BattleController bc = event.bc;
+        BattleController bc = event.getBattleController();
         for (BattleParticipant bp : bc.participants) {
 
             if (bp instanceof PlayerParticipant) {

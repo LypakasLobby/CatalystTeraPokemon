@@ -17,7 +17,7 @@ public class ServerStartedListener {
     @SubscribeEvent
     public static void onServerStarted (FMLServerStartedEvent event) throws ObjectMappingException {
 
-        MinecraftForge.EVENT_BUS.register(new InteractionListener());
+       // MinecraftForge.EVENT_BUS.register(new InteractionListener());
         MinecraftForge.EVENT_BUS.register(new JoinListener());
 
         Pixelmon.EVENT_BUS.register(new BattleEndListener());
@@ -26,7 +26,7 @@ public class ServerStartedListener {
         Pixelmon.EVENT_BUS.register(new FaintListener());
         Pixelmon.EVENT_BUS.register(new KillListener());
         Pixelmon.EVENT_BUS.register(new PixelmonUpdateListener());
-        //Pixelmon.EVENT_BUS.register(new RandomizeRaidListener());
+        Pixelmon.EVENT_BUS.register(new RaidListeners());
         Pixelmon.EVENT_BUS.register(new RetrieveListener());
 
         MiscHelpers.setRibbonData();

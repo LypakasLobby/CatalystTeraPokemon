@@ -12,7 +12,7 @@ public class BattleEndListener {
     @SubscribeEvent
     public void onBattleForceEnd (ForceEndBattleEvent event) {
 
-        BattleController bc = event.bc;
+        BattleController bc = event.getBattleController();
         TeraBattle teraBattle = BattleHelpers.getTeraBattleFromBattleController(bc);
         if (teraBattle == null) return;
 

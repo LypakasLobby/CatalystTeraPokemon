@@ -3,5 +3,5 @@ Specification-Title: catalystterapokemon
 Specification-Version: 1
 Implementation-Title: CatalystTeraPokemon
 Implementation-Version: 1.0.0-ALPHA
-Implementation-Timestamp: 2023-08-07T11:41:48-0500
+Implementation-Timestamp: 2023-08-09T13:11:43-0500
 
