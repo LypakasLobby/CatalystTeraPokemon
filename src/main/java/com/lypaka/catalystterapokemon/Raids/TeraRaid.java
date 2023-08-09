@@ -1,24 +1,36 @@
 package com.lypaka.catalystterapokemon.Raids;
 
-import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
-import com.pixelmonmod.pixelmon.battles.controller.participants.RaidPixelmonParticipant;
-import com.pixelmonmod.pixelmon.entities.DenEntity;
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class TeraRaid {
 
-    private RaidPixelmonParticipant rpp;
-    private final DenEntity den;
-    private final ArrayList<BattleParticipant> battleParticipants;
-    private final int stars;
+    private final int defaultStarLevel;
+    private final List<String> denLocations;
+    private final List<TeraRaidPokemon> raidPokemon;
 
-    public TeraRaid (RaidPixelmonParticipant rpp, DenEntity den, ArrayList<BattleParticipant> battleParticipants, int stars) {
+    public TeraRaid (int defaultStarLevel, List<String> denLocations, List<TeraRaidPokemon> raidPokemon) {
 
-        this.rpp = rpp;
-        this.den = den;
-        this.battleParticipants = battleParticipants;
-        this.stars = stars;
+        this.defaultStarLevel = defaultStarLevel;
+        this.denLocations = denLocations;
+        this.raidPokemon = raidPokemon;
+
+    }
+
+    public int getDefaultStarLevel() {
+
+        return this.defaultStarLevel;
+
+    }
+
+    public List<String> getDenLocations() {
+
+        return this.denLocations;
+
+    }
+
+    public List<TeraRaidPokemon> getRaidPokemon() {
+
+        return this.raidPokemon;
 
     }
 

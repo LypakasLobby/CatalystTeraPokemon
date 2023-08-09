@@ -14,6 +14,7 @@ public class ConfigGetters {
     public static int cost;
     public static int maxCharges;
     public static int maxTypeChanges;
+    public static List<String> teraRaids;
     public static int resetCost;
     public static Map<String, List<String>> teraBlacklist;
     public static Map<String, String> particleColors;
@@ -36,6 +37,7 @@ public class ConfigGetters {
         cost = CatalystTeraPokemon.configManager.getConfigNode(0, "Cost").getInt();
         maxCharges = CatalystTeraPokemon.configManager.getConfigNode(0, "Max-Charges").getInt();
         maxTypeChanges = CatalystTeraPokemon.configManager.getConfigNode(0, "Max-Type-Changes").getInt();
+        teraRaids = CatalystTeraPokemon.configManager.getConfigNode(0, "Raids").getList(TypeToken.of(String.class));
         resetCost = CatalystTeraPokemon.configManager.getConfigNode(0, "Reset-Cost").getInt();
         teraBlacklist = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Blacklist").getValue(new TypeToken<Map<String, List<String>>>() {});
         particleColors = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Colors").getValue(new TypeToken<Map<String, String>>() {});
