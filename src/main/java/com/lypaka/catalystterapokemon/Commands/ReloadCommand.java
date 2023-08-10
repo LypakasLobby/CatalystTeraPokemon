@@ -4,6 +4,7 @@ import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
 import com.lypaka.catalystterapokemon.ConfigGetters;
 import com.lypaka.catalystterapokemon.Helpers.DamageHelpers;
 import com.lypaka.catalystterapokemon.Helpers.MiscHelpers;
+import com.lypaka.catalystterapokemon.Raids.RaidRegistry;
 import com.lypaka.catalystterapokemon.TeraItems.TeraItemUtils;
 import com.lypaka.lypakautils.FancyText;
 import com.lypaka.lypakautils.MiscHandlers.PermissionHandler;
@@ -12,6 +13,8 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
+
+import java.io.IOException;
 
 public class ReloadCommand {
 
@@ -45,10 +48,11 @@ public class ReloadCommand {
                                                     MiscHelpers.loadRibbon();
                                                     DamageHelpers.loadTypeEffectivenessMaps();
                                                     TeraItemUtils.loadShards();
+                                                    RaidRegistry.loadRaids();
                                                     c.getSource().sendFeedback(FancyText.getFormattedText("&aSuccessfully reloaded CatalystTeraPokemon configuration!"), true);
                                                     return 1;
 
-                                                } catch (ObjectMappingException e) {
+                                                } catch (ObjectMappingException | IOException e) {
 
                                                     throw new RuntimeException(e);
 
