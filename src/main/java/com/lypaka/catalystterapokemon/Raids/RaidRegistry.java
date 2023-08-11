@@ -42,7 +42,9 @@ public class RaidRegistry {
             for (int i = 0; i < raidPokemonList.size(); i++) {
 
                 double pokemonChance = ccm.getConfigNode(i, "Chance").getDouble();
-                String palette = ccm.getConfigNode(i, "Palette").getString();
+                String form = ccm.getConfigNode(i, "Pokemon", "Form").getString();
+                String palette = ccm.getConfigNode(i, "Pokemon", "Palette").getString();
+                String species = ccm.getConfigNode(i, "Pokemon", "Species").getString();
 
                 int rewardMax = ccm.getConfigNode(i, "Rewards", "Amount-Max").getInt();
                 int rewardMin = ccm.getConfigNode(i, "Rewards", "Amount-Min").getInt();
@@ -72,7 +74,7 @@ public class RaidRegistry {
                 }
                 Map<String, Double> teraTypeChances = ccm.getConfigNode(i, "Tera-Type").getValue(new TypeToken<Map<String, Double>>() {});
 
-                TeraRaidPokemon teraRaidPokemon = new TeraRaidPokemon(pokemonChance, palette, raidRewards, scale, starLevel, teraTypeChances);
+                TeraRaidPokemon teraRaidPokemon = new TeraRaidPokemon(pokemonChance, form, palette, species, raidRewards, scale, starLevel, teraTypeChances);
                 teraPokemon.add(teraRaidPokemon);
 
             }

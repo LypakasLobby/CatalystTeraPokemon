@@ -1,52 +1,63 @@
 package com.lypaka.catalystterapokemon.API.Raids;
 
+import com.lypaka.catalystterapokemon.Raids.TeraRaid;
+import com.lypaka.catalystterapokemon.Raids.TeraRaidPokemon;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
-import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
-import com.pixelmonmod.pixelmon.battles.controller.participants.RaidPixelmonParticipant;
-import com.pixelmonmod.pixelmon.entities.DenEntity;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Cancelable
 public class StartTeraRaidEvent extends Event {
 
-    private final RaidPixelmonParticipant rpp;
-    private final DenEntity den;
-    private final ArrayList<BattleParticipant> battleParticipants;
-    private final int stars;
+    private final TeraRaid raid;
+    private TeraRaidPokemon raidPokemon;
+    private final List<BattleParticipant> battleParticipants;
+    private Pokemon pokemon;
 
-    public StartTeraRaidEvent (RaidPixelmonParticipant rpp, DenEntity den, ArrayList<BattleParticipant> battleParticipants, int stars) {
+    public StartTeraRaidEvent (TeraRaid raid, TeraRaidPokemon raidPokemon, List<BattleParticipant> battleParticipants, Pokemon pokemon) {
 
-        this.rpp = rpp;
-        this.den = den;
+        this.raid = raid;
+        this.raidPokemon = raidPokemon;
         this.battleParticipants = battleParticipants;
-        this.stars = stars;
 
     }
 
-    public RaidPixelmonParticipant getRaidPokemon() {
+    public TeraRaid getRaid() {
 
-        return this.rpp;
-
-    }
-
-    public DenEntity getDen() {
-
-        return this.den;
+        return this.raid;
 
     }
 
-    public ArrayList<BattleParticipant> getBattleParticipants() {
+    public TeraRaidPokemon getRaidPokemon() {
+
+        return this.raidPokemon;
+
+    }
+
+    public void setRaidPokemon (TeraRaidPokemon raidPokemon) {
+
+        this.raidPokemon = raidPokemon;
+
+    }
+
+    public List<BattleParticipant> getBattleParticipants() {
 
         return this.battleParticipants;
 
     }
 
-    public int getStars() {
+    public Pokemon getPokemon() {
 
-        return this.stars;
+        return this.pokemon;
+
+    }
+
+    public void setPokemon (Pokemon pokemon) {
+
+        this.pokemon = pokemon;
 
     }
 

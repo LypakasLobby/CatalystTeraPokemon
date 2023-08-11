@@ -1,6 +1,11 @@
 package com.lypaka.catalystterapokemon.Listeners;
 
+import com.lypaka.catalystterapokemon.API.Raids.StartTeraRaidEvent;
+import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
 import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
+import com.lypaka.catalystterapokemon.Raids.RaidRegistry;
+import com.lypaka.catalystterapokemon.Raids.TeraRaid;
+import com.lypaka.catalystterapokemon.Raids.TeraRaidPokemon;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleTickEvent;
 import com.pixelmonmod.pixelmon.api.events.raids.RandomizeRaidEvent;
 import com.pixelmonmod.pixelmon.api.events.raids.StartRaidEvent;
@@ -11,34 +16,160 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipan
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 import com.pixelmonmod.pixelmon.battles.controller.participants.RaidPixelmonParticipant;
 import com.pixelmonmod.pixelmon.battles.raids.RaidData;
+import com.pixelmonmod.pixelmon.entities.DenEntity;
+import mcp.client.Start;
+import net.minecraft.world.storage.ServerWorldInfo;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.*;
+
 public class RaidListeners {
+
+    public static Map<UUID, TeraRaid> raidMap = new HashMap<>();
+    public static Map<UUID, TeraRaidPokemon> raidPokemonMap = new HashMap<>();
+    public static Map<UUID, Pokemon> pokemonMap = new HashMap<>();
 
     @SubscribeEvent
     public void onRaidRandomize (RandomizeRaidEvent.ChooseSpecies event) {
 
-        Pokemon pokemon;
-        if (RandomHelper.getRandomChance(50)) {
+        DenEntity den = event.den;
+        String location = ((ServerWorldInfo) den.world.getWorldInfo()).getWorldName() + "," + den.getPosition().getX() + "," + den.getPosition().getY() + "," + den.getPosition().getZ();
+        List<TeraRaid> possibleRaids = new ArrayList<>();
+        for (Map.Entry<String, TeraRaid> entry : RaidRegistry.raidMap.entrySet()) {
 
-            pokemon = PokemonBuilder.builder().species("Snorlax").build();
+            TeraRaid raid = entry.getValue();
+            List<String> denLocations = raid.getDenLocations();
+            if (denLocations.contains(location)) {
 
-        } else {
+                if (!possibleRaids.contains(raid)) {
 
-            pokemon = PokemonBuilder.builder().species("Munchlax").build();
+                    possibleRaids.add(raid);
+
+                }
+
+            }
 
         }
 
-        event.setRaid(new RaidData(event.den.getEntityId(), 5, pokemon.getSpecies(), pokemon.getForm()));
+        if (possibleRaids.size() == 0) return;
+
+        TeraRaid selectedRaid = RandomHelper.getRandomElementFromList(possibleRaids);
+        List<TeraRaidPokemon> pokemonList = selectedRaid.getRaidPokemon();
+        Map<Double, UUID> map1 = new HashMap<>();
+        Map<UUID, TeraRaidPokemon> map2 = new HashMap<>();
+        for (TeraRaidPokemon p : pokemonList) {
+
+            UUID uuid = UUID.randomUUID();
+            map1.put(p.getChance(), uuid);
+            map2.put(uuid, p);
+
+        }
+
+        List<Double> chances = new ArrayList<>(map1.keySet());
+        Collections.sort(chances);
+
+        TeraRaidPokemon selectedPokemon = null;
+        for (int i = 0; i < chances.size(); i++) {
+
+            double c = chances.get(i);
+            if (RandomHelper.getRandomChance(c)) {
+
+                UUID uuid = map1.get(c);
+                selectedPokemon = map2.get(uuid);
+                break;
+
+            }
+
+        }
+
+        if (selectedPokemon == null) return;
+
+        String species = selectedPokemon.getSpecies();
+        String form = selectedPokemon.getForm();
+        String palette = selectedPokemon.getPalette();
+
+        Pokemon pokemon = PokemonBuilder.builder().species(species).build();
+        if (!form.equalsIgnoreCase("default")) {
+
+            pokemon.setForm(form);
+
+        }
+        if (!palette.equalsIgnoreCase("default")) {
+
+            pokemon.setPalette(palette);
+
+        }
+
+        event.setRaid(new RaidData(den.getEntityId(), selectedPokemon.getStarLevel(), pokemon.getSpecies(), pokemon.getForm()));
+        raidMap.put(den.getUniqueID(), selectedRaid);
+        raidPokemonMap.put(den.getUniqueID(), selectedPokemon);
+        pokemonMap.put(den.getUniqueID(), pokemon);
 
     }
 
     @SubscribeEvent // this is absolutely necessary for the Pokemon to be Tera'd
     public void onRaidStart (StartRaidEvent event) {
 
-        Pokemon pokemon = event.getRaidPixelmon().getPokemon();
-        NBTHelpers.setTeraType(pokemon, "Poison");
-        NBTHelpers.setTerastallized(pokemon, true);
+        DenEntity den = event.getDen();
+        if (raidPokemonMap.containsKey(den.getUniqueID())) {
+
+            TeraRaid raid = raidMap.get(den.getUniqueID());
+            List<BattleParticipant> participants = Arrays.asList(event.getAllyParticipants());
+            TeraRaidPokemon raidPokemon = raidPokemonMap.get(den.getUniqueID());
+            Pokemon pokemon = pokemonMap.get(den.getUniqueID());
+
+            StartTeraRaidEvent raidEvent = new StartTeraRaidEvent(raid, raidPokemon, participants, pokemon);
+            MinecraftForge.EVENT_BUS.post(raidEvent);
+            if (raidEvent.isCanceled()) return;
+
+            raidPokemon = raidEvent.getRaidPokemon();
+            pokemon = raidEvent.getPokemon();
+            Map<String, Double> teraTypes = raidPokemon.getTeraTypeChances();
+            String selectedType = null;
+
+            if (teraTypes.size() == 1) {
+
+                for (Map.Entry<String, Double> entry : teraTypes.entrySet()) {
+
+                    selectedType = entry.getKey();
+                    break;
+
+                }
+
+            } else {
+
+                double sum = teraTypes.values().stream().mapToDouble(c -> c).sum();
+                double rng = sum * RandomHelper.getRandom().nextDouble();
+
+                for (Map.Entry<String, Double> entry : teraTypes.entrySet()) {
+
+                    if (Double.compare(rng, entry.getValue()) <= 0) {
+
+                        selectedType = entry.getKey();
+                        break;
+
+                    } else {
+
+                        rng -= entry.getValue();
+
+                    }
+
+                }
+
+            }
+
+            if (selectedType == null) {
+
+                CatalystTeraPokemon.logger.error("Could not get Tera Type for TeraRaidPokemon: " + raidPokemon.getSpecies());
+                return;
+
+            }
+
+            NBTHelpers.setTeraType(pokemon, selectedType);
+            NBTHelpers.setTerastallized(pokemon, true);
+
+        }
 
     }
 
