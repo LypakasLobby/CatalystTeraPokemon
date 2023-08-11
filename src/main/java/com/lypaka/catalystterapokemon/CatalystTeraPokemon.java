@@ -15,11 +15,6 @@ import java.nio.file.Paths;
 @Mod("catalystterapokemon")
 public class CatalystTeraPokemon {
 
-    /**
-     * TODO
-     *
-     */
-
     public static final String MOD_ID = "catalystterapokemon";
     public static final String MOD_NAME = "CatalystTeraPokemon";
     public static final Logger logger = LogManager.getLogger("CatalystTeraPokemon");
@@ -31,7 +26,7 @@ public class CatalystTeraPokemon {
         String[] files = new String[]{"catalystterapokemon.conf", "items.conf", "storage.conf"};
         configManager = new BasicConfigManager(files, dir, CatalystTeraPokemon.class, MOD_NAME, MOD_ID, logger);
         configManager.init();
-        ConfigGetters.load();
+        ConfigGetters.load(false);
 
     }
 

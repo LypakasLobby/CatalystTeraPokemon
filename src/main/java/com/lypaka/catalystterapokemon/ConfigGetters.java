@@ -29,7 +29,7 @@ public class ConfigGetters {
 
     public static Map<String, Integer> playerCharges;
 
-    public static void load() throws ObjectMappingException {
+    public static void load (boolean reload) throws ObjectMappingException {
 
         onlyAllowOTUUID = CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Only-OT-UUID").getBoolean();
         allowParticles = CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Particles").getBoolean();
@@ -50,7 +50,11 @@ public class ConfigGetters {
         partyLore = CatalystTeraPokemon.configManager.getConfigNode(1, "Party", "Lore").getList(TypeToken.of(String.class));
         shardItems = CatalystTeraPokemon.configManager.getConfigNode(1, "Shards").getValue(new TypeToken<Map<String, Map<String, String>>>() {});
 
-        playerCharges = CatalystTeraPokemon.configManager.getConfigNode(2, "Charges").getValue(new TypeToken<Map<String, Integer>>() {});
+        if (!reload) {
+
+            playerCharges = CatalystTeraPokemon.configManager.getConfigNode(2, "Charges").getValue(new TypeToken<Map<String, Integer>>() {});
+
+        }
 
     }
 

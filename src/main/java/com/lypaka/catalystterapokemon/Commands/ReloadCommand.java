@@ -43,7 +43,7 @@ public class ReloadCommand {
                                                 try {
 
                                                     CatalystTeraPokemon.configManager.load();
-                                                    ConfigGetters.load();
+                                                    ConfigGetters.load(true);
                                                     MiscHelpers.setRibbonData();
                                                     MiscHelpers.loadRibbon();
                                                     DamageHelpers.loadTypeEffectivenessMaps();
