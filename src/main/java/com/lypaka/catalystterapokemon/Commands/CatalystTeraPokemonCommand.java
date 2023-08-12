@@ -18,6 +18,7 @@ public class CatalystTeraPokemonCommand {
     public static void onCommandRegistration (RegisterCommandsEvent event) {
 
         new GiveShardCommand(event.getDispatcher());
+        new LocateDenCommand(event.getDispatcher());
         new MenuCommand(event.getDispatcher());
         new ReloadCommand(event.getDispatcher());
         new SetTeraTypeCommand(event.getDispatcher());

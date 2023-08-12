@@ -6,18 +6,53 @@ import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.catalystterapokemon.TeraItems.TeraItemUtils;
 import com.lypaka.catalystterapokemon.TeraItems.TeraShard;
 import com.lypaka.lypakautils.FancyText;
+import com.pixelmonmod.pixelmon.api.events.raids.DenEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Hand;
+import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class InteractionListener {
+
+    public static List<UUID> locatorList = new ArrayList<>();
+
+    @SubscribeEvent
+    public void onRaidClick (DenEvent.Interact event) {
+
+        if (event.wasRightClick()) {
+
+            UUID uuid = event.getPlayer().getUniqueID();
+            locatorList.removeIf(e -> {
+
+                if (e.toString().equalsIgnoreCase(uuid.toString())) {
+
+                    event.setCanceled(true);
+                    String world = ((ServerWorldInfo) event.getDen().world.getWorldInfo()).getWorldName();
+                    int x = event.getDen().getPosition().getX();
+                    int y = event.getDen().getPosition().getY();
+                    int z = event.getDen().getPosition().getZ();
+
+                    String location = world + "," + x + "," + y + "," + z;
+                    event.getPlayer().sendMessage(FancyText.getFormattedText("&eDen located at: &a" + location), uuid);
+                    return true;
+
+                }
+
+                return false;
+
+            });
+
+        }
+
+    }
 
     @SubscribeEvent
     public void onPokemonClick (PlayerInteractEvent.EntityInteractSpecific event) {
