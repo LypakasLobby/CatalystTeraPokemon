@@ -1,5 +1,6 @@
 package com.lypaka.catalystterapokemon.Listeners;
 
+import com.lypaka.catalystterapokemon.API.Raids.EndTeraRaidEvent;
 import com.lypaka.catalystterapokemon.API.Raids.StartTeraRaidEvent;
 import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
 import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
@@ -7,6 +8,7 @@ import com.lypaka.catalystterapokemon.Raids.RaidRegistry;
 import com.lypaka.catalystterapokemon.Raids.TeraRaid;
 import com.lypaka.catalystterapokemon.Raids.TeraRaidPokemon;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleTickEvent;
+import com.pixelmonmod.pixelmon.api.events.raids.EndRaidEvent;
 import com.pixelmonmod.pixelmon.api.events.raids.RandomizeRaidEvent;
 import com.pixelmonmod.pixelmon.api.events.raids.StartRaidEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
@@ -17,7 +19,6 @@ import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 import com.pixelmonmod.pixelmon.battles.controller.participants.RaidPixelmonParticipant;
 import com.pixelmonmod.pixelmon.battles.raids.RaidData;
 import com.pixelmonmod.pixelmon.entities.DenEntity;
-import mcp.client.Start;
 import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -29,6 +30,7 @@ public class RaidListeners {
     public static Map<UUID, TeraRaid> raidMap = new HashMap<>();
     public static Map<UUID, TeraRaidPokemon> raidPokemonMap = new HashMap<>();
     public static Map<UUID, Pokemon> pokemonMap = new HashMap<>();
+    public static Map<RaidPixelmonParticipant, TeraRaidPokemon> pokemonToPokemonMap = new HashMap<>();
 
     @SubscribeEvent
     public void onRaidRandomize (RandomizeRaidEvent.ChooseSpecies event) {
@@ -168,6 +170,7 @@ public class RaidListeners {
 
             NBTHelpers.setTeraType(pokemon, selectedType);
             NBTHelpers.setTerastallized(pokemon, true);
+            pokemonToPokemonMap.put(event.getRaidParticipant(), raidPokemon);
 
         }
 
@@ -183,40 +186,45 @@ public class RaidListeners {
                 if (bp instanceof RaidPixelmonParticipant) {
 
                     RaidPixelmonParticipant rpp = (RaidPixelmonParticipant) bp;
-                    rpp.getGovernor().getSettings().moveset.removeIf(a -> {
+                    if (pokemonToPokemonMap.containsKey(rpp)) {
 
-                        try {
+                        TeraRaidPokemon raidPokemon = pokemonToPokemonMap.get(rpp);
+                        rpp.getGovernor().getSettings().moveset.removeIf(a -> {
 
-                            if (a != null) {
+                            try {
 
-                                return a.isMax;
+                                if (a != null) {
+
+                                    return a.isMax;
+
+                                }
+
+                            } catch (NullPointerException er) {
+
+                                return true;
 
                             }
 
-                        } catch (NullPointerException er) {
 
-                            return true;
+                            return false;
 
-                        }
+                        });
+                        PixelmonWrapper wrapper = rpp.getWrapper();
+                        Pokemon pokemon = wrapper.pokemon;
+                        if (NBTHelpers.isTerastallized(pokemon)) {
 
+                            if (wrapper.isDynamax > 0) {
 
-                        return false;
+                                wrapper.isDynamax = 0;
+                                wrapper.dynamaxTurns = 0;
+                                wrapper.dynamaxAnimationTicks = 0;
+                                wrapper.entity.setDynamaxScale(0);
+                                wrapper.dynamax(true, wrapper.getHealthPercent());
+                                wrapper.entity.setPixelmonScale(raidPokemon.getScale());
+                                event.getBattleController().updateFormChange(wrapper);
+                                break;
 
-                    });
-                    PixelmonWrapper wrapper = rpp.getWrapper();
-                    Pokemon pokemon = wrapper.pokemon;
-                    if (NBTHelpers.isTerastallized(pokemon)) {
-
-                        if (wrapper.isDynamax > 0) {
-
-                            wrapper.isDynamax = 0;
-                            wrapper.dynamaxTurns = 0;
-                            wrapper.dynamaxAnimationTicks = 0;
-                            wrapper.entity.setDynamaxScale(0);
-                            wrapper.dynamax(true, wrapper.getHealthPercent());
-                            wrapper.entity.setPixelmonScale(2.0f);
-                            event.getBattleController().updateFormChange(wrapper);
-                            break;
+                            }
 
                         }
 
@@ -225,6 +233,27 @@ public class RaidListeners {
                 }
 
             }
+
+        }
+
+    }
+
+    @SubscribeEvent
+    public void onRaidEnd (EndRaidEvent event) {
+
+        UUID uuid = event.getRaid().getDenEntity(event.getRaidParticipant().getEntity().world).get().getUniqueID();
+        if (raidMap.containsKey(uuid)) {
+
+            pokemonToPokemonMap.entrySet().removeIf(e -> e.getKey() == event.getRaidParticipant());
+            TeraRaid teraRaid = raidMap.get(uuid);
+            raidMap.entrySet().removeIf(e -> e.getKey().toString().equalsIgnoreCase(uuid.toString()));
+            TeraRaidPokemon teraPokemon = raidPokemonMap.get(uuid);
+            ArrayList<BattleParticipant> participants = event.getAllyParticipants();
+            raidPokemonMap.entrySet().removeIf(e -> e.getKey().toString().equalsIgnoreCase(uuid.toString()));
+            pokemonMap.entrySet().removeIf(e -> e.getKey().toString().equalsIgnoreCase(uuid.toString()));
+
+            EndTeraRaidEvent endTeraRaidEvent = new EndTeraRaidEvent(teraRaid, teraPokemon, participants);
+            MinecraftForge.EVENT_BUS.post(endTeraRaidEvent);
 
         }
 
