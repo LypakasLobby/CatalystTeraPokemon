@@ -29,6 +29,7 @@ public class ServerStartedListener {
         Pixelmon.EVENT_BUS.register(new FaintListener());
         Pixelmon.EVENT_BUS.register(new KillListener());
         Pixelmon.EVENT_BUS.register(new PixelmonUpdateListener());
+        Pixelmon.EVENT_BUS.register(new PokemonAcquireListeners());
         Pixelmon.EVENT_BUS.register(new RaidListeners());
         Pixelmon.EVENT_BUS.register(new RetrieveListener());
 

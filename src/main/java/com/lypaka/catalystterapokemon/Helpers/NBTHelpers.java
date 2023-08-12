@@ -1,7 +1,12 @@
 package com.lypaka.catalystterapokemon.Helpers;
 
+import com.lypaka.catalystterapokemon.ConfigGetters;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.util.helpers.RandomHelper;
 import net.minecraft.nbt.CompoundNBT;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NBTHelpers {
 
@@ -71,6 +76,25 @@ public class NBTHelpers {
     public static String getProperName (String teraType) {
 
         return teraType.substring(0, 1).toUpperCase() + teraType.substring(1);
+
+    }
+
+    public static String getRandomTeraType (Pokemon pokemon) {
+
+        List<String> types = new ArrayList<>(ConfigGetters.particleColors.keySet());
+        if (pokemon != null) {
+
+            String species = pokemon.getSpecies().getName();
+            if (ConfigGetters.teraBlacklist.containsKey(species)) {
+
+                List<String> notAllowed = ConfigGetters.teraBlacklist.get(species);
+                types.removeIf(notAllowed::contains);
+
+            }
+
+        }
+
+        return RandomHelper.getRandomElementFromList(types);
 
     }
 
