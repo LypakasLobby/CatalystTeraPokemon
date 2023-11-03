@@ -1,8 +1,10 @@
 package com.lypaka.catalystterapokemon.Helpers;
 
 import com.pixelmonmod.pixelmon.api.pokemon.Element;
+import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 
+import java.lang.annotation.ElementType;
 import java.util.*;
 
 // I'm not particularly fond of what follows, but I'm also too lazy to go looking through Pixelmon's code to see how they do this...so "manual Samuel" time!
@@ -13,8 +15,35 @@ public class DamageHelpers {
     public static Map<String, List<Element>> susceptibleTypes = new HashMap<>(); // Moves that would be super effective against the Tera type
     public static Map<String, List<Element>> immuneTypes = new HashMap<>(); // Moves that would just not hit the Tera type due to now being immune (Normal -> Ghost)
 
-    public static boolean dealsNotVeryEffectiveDamage (String teraType, Attack attack) {
+    public static boolean dealsNotVeryEffectiveDamage (String teraType, Attack attack, Pokemon target, Pokemon user) {
 
+        if (attack.getMove().getAttackName().equalsIgnoreCase("Tera Blast")) {
+
+            if (NBTHelpers.isTerastallized(user)) {
+
+                // Tera Blast becomes the same type as the Attacker's Tera Type
+                Element userTeraType = Element.parseType(NBTHelpers.getTeraType(user));
+                List<Element> targetsType = new ArrayList<>();//target.getForm().getTypes();
+                if (NBTHelpers.isTerastallized(target)) {
+
+                    targetsType.add(Element.parseType(teraType));
+
+                } else {
+
+                    targetsType = target.getForm().getTypes();
+
+                }
+
+                for (Element types : targetsType) {
+
+                    List<Element> resisted = resistedTypes.get(types.getName());
+                    if (resisted.contains(userTeraType)) return true;
+
+                }
+
+            }
+
+        }
         boolean notVeryEffective = false;
         List<Element> susceptible = resistedTypes.get(teraType);
         Element attackType = attack.getActualType();
@@ -25,8 +54,35 @@ public class DamageHelpers {
 
     }
 
-    public static boolean dealsSuperEffectiveDamage (String teraType, Attack attack) {
+    public static boolean dealsSuperEffectiveDamage (String teraType, Attack attack, Pokemon target, Pokemon user) {
 
+        if (attack.getMove().getAttackName().equalsIgnoreCase("Tera Blast")) {
+
+            if (NBTHelpers.isTerastallized(user)) {
+
+                // Tera Blast becomes the same type as the Attacker's Tera Type
+                Element userTeraType = Element.parseType(NBTHelpers.getTeraType(user));
+                List<Element> targetsType = new ArrayList<>();//target.getForm().getTypes();
+                if (NBTHelpers.isTerastallized(target)) {
+
+                    targetsType.add(Element.parseType(teraType));
+
+                } else {
+
+                    targetsType = target.getForm().getTypes();
+
+                }
+
+                for (Element types : targetsType) {
+
+                    List<Element> weakTypes = susceptibleTypes.get(types.getName());
+                    if (weakTypes.contains(userTeraType)) return true;
+
+                }
+
+            }
+
+        }
         boolean superEffective = false;
         List<Element> susceptible = susceptibleTypes.get(teraType);
         Element attackType = attack.getActualType();

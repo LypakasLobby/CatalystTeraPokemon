@@ -17,6 +17,7 @@ public class DamageListeners {
     public void onTypeEffectiveness (AttackEvent.TypeEffectiveness event) {
 
         Pokemon target = event.target.pokemon;
+        Pokemon user = event.user.pokemon;
         Attack attack = event.user.attack;
 
         if (NBTHelpers.isTerastallized(target)) {
@@ -27,11 +28,11 @@ public class DamageListeners {
 
                 event.setEffectiveness(Effectiveness.None);
 
-            } else if (DamageHelpers.dealsSuperEffectiveDamage(teraType, attack)) {
+            } else if (DamageHelpers.dealsSuperEffectiveDamage(teraType, attack, target, user)) {
 
                 event.setEffectiveness(Effectiveness.Super);
 
-            } else if (DamageHelpers.dealsNotVeryEffectiveDamage(teraType, attack)) {
+            } else if (DamageHelpers.dealsNotVeryEffectiveDamage(teraType, attack, target, user)) {
 
                 event.setEffectiveness(Effectiveness.Not);
 
