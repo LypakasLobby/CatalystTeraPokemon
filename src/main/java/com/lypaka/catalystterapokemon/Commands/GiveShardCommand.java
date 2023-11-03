@@ -47,12 +47,12 @@ public class GiveShardCommand {
                                                                                                 if (c.getSource().getEntity() instanceof ServerPlayerEntity) {
 
                                                                                                     ServerPlayerEntity player = (ServerPlayerEntity) c.getSource().getEntity();
-                                                                                                   /* if (!PermissionHandler.hasPermission(player, "catalystterapokemon.command.admin")) {
+                                                                                                    if (!PermissionHandler.hasPermission(player, "catalystterapokemon.command.admin")) {
 
                                                                                                         player.sendMessage(FancyText.getFormattedText("&cYou don't have permission to use this command!"), player.getUniqueID());
                                                                                                         return 0;
 
-                                                                                                    }*/
+                                                                                                    }
 
                                                                                                 }
 
@@ -88,12 +88,12 @@ public class GiveShardCommand {
                                                                                 if (c.getSource().getEntity() instanceof ServerPlayerEntity) {
 
                                                                                     ServerPlayerEntity player = (ServerPlayerEntity) c.getSource().getEntity();
-                                                                                    /*if (!PermissionHandler.hasPermission(player, "catalystterapokemon.command.admin")) {
+                                                                                    if (!PermissionHandler.hasPermission(player, "catalystterapokemon.command.admin")) {
 
                                                                                         player.sendMessage(FancyText.getFormattedText("&cYou don't have permission to use this command!"), player.getUniqueID());
                                                                                         return 0;
 
-                                                                                    }*/
+                                                                                    }
 
                                                                                 }
 

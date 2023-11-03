@@ -42,12 +42,12 @@ public class SetTeraTypeCommand {
                                                                                 if (c.getSource().getEntity() instanceof ServerPlayerEntity) {
 
                                                                                     ServerPlayerEntity player = (ServerPlayerEntity) c.getSource().getEntity();
-                                                                                    /*if (!PermissionHandler.hasPermission(player, "catalystterapokemon.command.admin")) {
+                                                                                    if (!PermissionHandler.hasPermission(player, "catalystterapokemon.command.admin")) {
 
                                                                                         player.sendMessage(FancyText.getFormattedText("&cYou don't have permission to use this command!"), player.getUniqueID());
                                                                                         return 1;
 
-                                                                                    }*/
+                                                                                    }
                                                                                     int slot = IntegerArgumentType.getInteger(c, "slot") - 1;
                                                                                     String type = NBTHelpers.getProperName(StringArgumentType.getString(c, "type"));
                                                                                     PlayerPartyStorage storage = StorageProxy.getParty(player);

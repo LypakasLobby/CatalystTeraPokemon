@@ -6,6 +6,7 @@ import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.pixelmonmod.pixelmon.api.events.PokemonReceivedEvent;
 import com.pixelmonmod.pixelmon.api.events.spawning.SpawnEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.api.util.helpers.RandomHelper;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
 import com.pixelmonmod.pixelmon.spawning.PlayerTrackingSpawner;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -17,17 +18,43 @@ public class PokemonAcquireListeners {
     @SubscribeEvent
     public void onReceive (PokemonReceivedEvent event) {
 
-        if (ConfigGetters.spawnOnlyTera) return;
         ServerPlayerEntity player = event.getPlayer();
         Pokemon pokemon = event.getPokemon();
+
+        if (event.getCause().equalsIgnoreCase("Starter")) {
+
+            if (!ConfigGetters.starterCanHaveTera) return;
+            if (!NBTHelpers.getTeraType(pokemon).equalsIgnoreCase("")) {
+
+                if (RandomHelper.getRandomChance(ConfigGetters.teraChance)) {
+
+                    String randomType = NBTHelpers.getRandomTeraType(pokemon);
+                    SetTeraTypeEvent setEvent = new SetTeraTypeEvent(player, pokemon, randomType, event.getCause());
+                    MinecraftForge.EVENT_BUS.post(setEvent);
+                    if (!setEvent.isCanceled()) {
+
+                        NBTHelpers.setTeraType(pokemon, setEvent.getTeraType());
+
+                    }
+
+                }
+
+            }
+
+        }
+        if (ConfigGetters.spawnOnlyTera) return;
         if (!NBTHelpers.getTeraType(pokemon).equalsIgnoreCase("")) {
 
-            String randomType = NBTHelpers.getRandomTeraType(pokemon);
-            SetTeraTypeEvent setEvent = new SetTeraTypeEvent(player, pokemon, randomType, event.getCause());
-            MinecraftForge.EVENT_BUS.post(setEvent);
-            if (!setEvent.isCanceled()) {
+            if (RandomHelper.getRandomChance(ConfigGetters.teraChance)) {
 
-                NBTHelpers.setTeraType(pokemon, setEvent.getTeraType());
+                String randomType = NBTHelpers.getRandomTeraType(pokemon);
+                SetTeraTypeEvent setEvent = new SetTeraTypeEvent(player, pokemon, randomType, event.getCause());
+                MinecraftForge.EVENT_BUS.post(setEvent);
+                if (!setEvent.isCanceled()) {
+
+                    NBTHelpers.setTeraType(pokemon, setEvent.getTeraType());
+
+                }
 
             }
 
@@ -48,14 +75,18 @@ public class PokemonAcquireListeners {
             }
             PixelmonEntity pixelmon = (PixelmonEntity) event.action.getOrCreateEntity();
             Pokemon pokemon = pixelmon.getPokemon();
-            if (!NBTHelpers.getTeraType(pokemon).equalsIgnoreCase("")) {
+            if (RandomHelper.getRandomChance(ConfigGetters.teraChance)) {
 
-                String randomType = NBTHelpers.getRandomTeraType(pokemon);
-                SetTeraTypeEvent setEvent = new SetTeraTypeEvent(player, pokemon, randomType, "Spawn");
-                MinecraftForge.EVENT_BUS.post(setEvent);
-                if (!setEvent.isCanceled()) {
+                if (!NBTHelpers.getTeraType(pokemon).equalsIgnoreCase("")) {
 
-                    NBTHelpers.setTeraType(pokemon, setEvent.getTeraType());
+                    String randomType = NBTHelpers.getRandomTeraType(pokemon);
+                    SetTeraTypeEvent setEvent = new SetTeraTypeEvent(player, pokemon, randomType, "Spawn");
+                    MinecraftForge.EVENT_BUS.post(setEvent);
+                    if (!setEvent.isCanceled()) {
+
+                        NBTHelpers.setTeraType(pokemon, setEvent.getTeraType());
+
+                    }
 
                 }
 

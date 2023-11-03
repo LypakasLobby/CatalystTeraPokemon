@@ -16,9 +16,10 @@ public class ConfigGetters {
     public static int maxTypeChanges;
     public static List<String> teraRaids;
     public static int resetCost;
+    public static boolean starterCanHaveTera;
     public static boolean spawnOnlyTera;
     public static Map<String, List<String>> teraBlacklist;
-    public static double teraSpawnChance;
+    public static double teraChance;
     public static Map<String, String> particleColors;
 
     public static String orbDisplayName;
@@ -41,9 +42,10 @@ public class ConfigGetters {
         maxTypeChanges = CatalystTeraPokemon.configManager.getConfigNode(0, "Max-Type-Changes").getInt();
         teraRaids = CatalystTeraPokemon.configManager.getConfigNode(0, "Raids").getList(TypeToken.of(String.class));
         resetCost = CatalystTeraPokemon.configManager.getConfigNode(0, "Reset-Cost").getInt();
+        starterCanHaveTera = CatalystTeraPokemon.configManager.getConfigNode(0, "Starter-Can-Have-Tera").getBoolean();
         spawnOnlyTera = CatalystTeraPokemon.configManager.getConfigNode(0, "Spawn-Only").getBoolean();
         teraBlacklist = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Blacklist").getValue(new TypeToken<Map<String, List<String>>>() {});
-        teraSpawnChance = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Chance").getDouble();
+        teraChance = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Chance").getDouble();
         particleColors = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Colors").getValue(new TypeToken<Map<String, String>>() {});
 
         orbDisplayName = CatalystTeraPokemon.configManager.getConfigNode(1, "Orb", "Display-Name").getString();
