@@ -59,9 +59,20 @@ public class SetTeraTypeCommand {
 
                                                                                     } else {
 
-                                                                                        NBTHelpers.setTeraType(pokemon, type);
-                                                                                        player.sendMessage(FancyText.getFormattedText("&aSuccessfully set " + pokemon.getSpecies().getName() + "'s Tera Type to " + type + "!"), player.getUniqueID());
-                                                                                        return 1;
+                                                                                        int currentChanges = NBTHelpers.getTeraCount(pokemon);
+                                                                                        if (currentChanges < ConfigGetters.maxTypeChanges) {
+
+                                                                                            NBTHelpers.setTeraType(pokemon, type);
+                                                                                            player.sendMessage(FancyText.getFormattedText("&aSuccessfully set " + pokemon.getSpecies().getName() + "'s Tera Type to " + type + "!"), player.getUniqueID());
+                                                                                            return 1;
+
+                                                                                        } else {
+
+                                                                                            player.sendMessage(FancyText.getFormattedText("&cYou've exceeded max Tera Type changes on this Pokemon!"), player.getUniqueID());
+                                                                                            player.sendMessage(FancyText.getFormattedText("&cTo reset the Tera Type changes, please visit the reset menu at \"/tera menu\"!"), player.getUniqueID());
+                                                                                            return 0;
+
+                                                                                        }
 
                                                                                     }
 
