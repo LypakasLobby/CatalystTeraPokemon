@@ -64,6 +64,7 @@ public class InteractionListener {
         TeraShard shard = TeraItemUtils.getFromPlayerItem(player.getHeldItem(Hand.MAIN_HAND));
         if (shard == null) return;
 
+        event.setCanceled(true); // this cancels the event in the event the shard item has another function
         if (event.getTarget() instanceof PixelmonEntity) {
 
             PixelmonEntity pixelmon = (PixelmonEntity) event.getTarget();
@@ -107,7 +108,6 @@ public class InteractionListener {
             MinecraftForge.EVENT_BUS.post(shardEvent);
             if (!shardEvent.isCanceled()) {
 
-                event.setCanceled(true); // this cancels the event in the event the shard item has another function
                 player.getHeldItem(Hand.MAIN_HAND).setCount(player.getHeldItem(Hand.MAIN_HAND).getCount() - 1);
                 NBTHelpers.setTeraType(pokemon, type);
                 player.sendMessage(FancyText.getFormattedText("&eSuccessfully set " + pokemon.getSpecies().getName() + "'s Tera Type to " + type + "!"), player.getUniqueID());
