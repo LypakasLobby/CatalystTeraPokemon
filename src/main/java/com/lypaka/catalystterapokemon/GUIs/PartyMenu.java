@@ -13,6 +13,7 @@ import com.lypaka.lypakautils.MiscHandlers.LogicalPixelmonMoneyHandler;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
+import com.pixelmonmod.pixelmon.api.util.helpers.SpriteItemHelper;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.ListNBT;
@@ -52,8 +53,7 @@ public class PartyMenu {
             ItemStack item;
             if (pokemon != null) {
 
-                String id = pokemon.getSprite().toString();
-                item = ItemStackBuilder.buildFromStringID(id);
+                item = SpriteItemHelper.getPhoto(pokemon);
                 item.setDisplayName(FancyText.getFormattedText("&e" + pokemon.getSpecies().getName()));
                 ListNBT lore = new ListNBT();
                 lore.add(StringNBT.valueOf(ITextComponent.Serializer.toJson(FancyText.getFormattedText("&7Reset Cost: &a" + ConfigGetters.resetCost))));
@@ -88,7 +88,6 @@ public class PartyMenu {
             ItemStack purple = ItemStackBuilder.buildFromStringID("minecraft:purple_stained_glass_pane");
             purple.setDisplayName(FancyText.getFormattedText(""));
             page.getTemplate().getSlot(1).setButton(GooeyButton.builder().display(purple).build());
-            page.getTemplate().getSlot(3).setButton(GooeyButton.builder().display(purple).build());
 
             ItemStack pink = ItemStackBuilder.buildFromStringID("minecraft:pink_stained_glass_pane");
             pink.setDisplayName(FancyText.getFormattedText(""));

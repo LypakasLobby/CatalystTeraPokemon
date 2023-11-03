@@ -2,6 +2,7 @@ package com.lypaka.catalystterapokemon.Helpers;
 
 import com.lypaka.catalystterapokemon.TeraBattle;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
+import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
@@ -66,13 +67,18 @@ public class BattleHelpers {
 
         for (int i = 0; i < 4; i++) {
 
-            String move = pokemon.getMoveset().attacks[i].getActualMove().getAttackName();
-            if (move.contains("Max")) return false; // Pokemon is Dynamaxed/GMaxed
-            if (move.equalsIgnoreCase("Dragon Ascent") || move.equalsIgnoreCase("DragonAscent")) {
+            Attack attack = pokemon.getMoveset().attacks[i];
+            if (attack != null) {
 
-                if (pokemon.getSpecies().getName().equalsIgnoreCase("Rayquaza")) {
+                String move = pokemon.getMoveset().attacks[i].getActualMove().getAttackName();
+                if (move.contains("Max")) return false; // Pokemon is Dynamaxed/GMaxed
+                if (move.equalsIgnoreCase("Dragon Ascent") || move.equalsIgnoreCase("DragonAscent")) {
 
-                    return false;
+                    if (pokemon.getSpecies().getName().equalsIgnoreCase("Rayquaza")) {
+
+                        return false;
+
+                    }
 
                 }
 

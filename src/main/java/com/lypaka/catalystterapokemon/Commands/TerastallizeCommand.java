@@ -128,6 +128,10 @@ public class TerastallizeCommand {
                                                                                     NBTHelpers.setTerastallized(pokemon, true);
                                                                                     player.sendMessage(FancyText.getFormattedText("&a" + pokemon.getSpecies().getName() + " has Terastallized into the " + teraType + " Tera Type!"), player.getUniqueID());
 
+                                                                                } else {
+
+                                                                                    player.sendMessage(FancyText.getFormattedText("&cYou cannot do that outside of battle!"), player.getUniqueID());
+
                                                                                 }
 
                                                                             }

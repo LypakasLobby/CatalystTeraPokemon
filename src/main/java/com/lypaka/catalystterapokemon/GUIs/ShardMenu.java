@@ -74,7 +74,7 @@ public class ShardMenu {
         ItemStack orb = ItemStackBuilder.buildFromStringID(ConfigGetters.orbID);
         orb.setDisplayName(FancyText.getFormattedText(ConfigGetters.orbDisplayName));
         ListNBT orbLore = new ListNBT();
-        int charges = ConfigGetters.playerCharges.get(player.getUniqueID().toString());
+        int charges = ConfigGetters.playerCharges.getOrDefault(player.getUniqueID().toString(), 0);
         for (String s : ConfigGetters.orbLore) {
 
             orbLore.add(StringNBT.valueOf(ITextComponent.Serializer.toJson(FancyText.getFormattedText(s
@@ -113,7 +113,7 @@ public class ShardMenu {
 
     private static Button getButton (TeraShard shard, ItemStack item, ServerPlayerEntity player) {
 
-        int charges = ConfigGetters.playerCharges.get(player.getUniqueID().toString());
+        int charges = ConfigGetters.playerCharges.getOrDefault(player.getUniqueID().toString(), 0);
         Button button;
 
         if (charges >= ConfigGetters.cost) {

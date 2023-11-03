@@ -3,6 +3,7 @@ package com.lypaka.catalystterapokemon.TeraItems;
 import com.google.common.reflect.TypeToken;
 import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
 import com.lypaka.catalystterapokemon.ConfigGetters;
+import com.lypaka.lypakautils.FancyText;
 import net.minecraft.item.ItemStack;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
@@ -41,7 +42,7 @@ public class TeraItemUtils {
         for (TeraShard teraShard : TeraItemUtils.teraShards) {
 
             String shardID = teraShard.getID();
-            String shardDisplayName = teraShard.getDisplayName();
+            String shardDisplayName = FancyText.getFormattedString(teraShard.getDisplayName());
 
             if (id.equalsIgnoreCase(shardID) && displayName.equalsIgnoreCase(shardDisplayName)) {
 

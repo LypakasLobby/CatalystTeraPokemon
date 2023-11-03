@@ -15,6 +15,7 @@ import net.minecraft.world.storage.ServerWorldInfo;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.LogicalSide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +58,8 @@ public class InteractionListener {
     @SubscribeEvent
     public void onPokemonClick (PlayerInteractEvent.EntityInteractSpecific event) {
 
+        if (event.getSide() == LogicalSide.CLIENT) return;
+        if (event.getHand() == Hand.OFF_HAND) return;
         ServerPlayerEntity player = (ServerPlayerEntity) event.getPlayer();
         TeraShard shard = TeraItemUtils.getFromPlayerItem(player.getHeldItem(Hand.MAIN_HAND));
         if (shard == null) return;
@@ -82,7 +85,7 @@ public class InteractionListener {
             if (currentChanges >= ConfigGetters.maxTypeChanges) {
 
                 player.sendMessage(FancyText.getFormattedText("&cYou've exceeded max Tera Type changes on this Pokemon!"), player.getUniqueID());
-                player.sendMessage(FancyText.getFormattedText("&cTo reset the Tera Type changes, please visit the reset menu at \"/tmenu\"!"), player.getUniqueID());
+                player.sendMessage(FancyText.getFormattedText("&cTo reset the Tera Type changes, please visit the reset menu at \"/tera menu\"!"), player.getUniqueID());
                 return;
 
             }
@@ -104,6 +107,7 @@ public class InteractionListener {
             MinecraftForge.EVENT_BUS.post(shardEvent);
             if (!shardEvent.isCanceled()) {
 
+                event.setCanceled(true); // this cancels the event in the event the shard item has another function
                 player.getHeldItem(Hand.MAIN_HAND).setCount(player.getHeldItem(Hand.MAIN_HAND).getCount() - 1);
                 NBTHelpers.setTeraType(pokemon, type);
                 player.sendMessage(FancyText.getFormattedText("&eSuccessfully set " + pokemon.getSpecies().getName() + "'s Tera Type to " + type + "!"), player.getUniqueID());
