@@ -44,25 +44,41 @@ public class DamageListeners {
 
                 TeraAttackEffectivenessEvent teraEvent = new TeraAttackEffectivenessEvent(userOwner, victimOwner, user, target, Effectiveness.None);
                 MinecraftForge.EVENT_BUS.post(teraEvent);
-                event.setEffectiveness(teraEvent.getEffectiveness());
+                if (!teraEvent.isCanceled()) {
+
+                    event.setEffectiveness(teraEvent.getEffectiveness());
+
+                }
 
             } else if (DamageHelpers.dealsSuperEffectiveDamage(teraType, attack, target, user)) {
 
                 TeraAttackEffectivenessEvent teraEvent = new TeraAttackEffectivenessEvent(userOwner, victimOwner, user, target, Effectiveness.Super);
                 MinecraftForge.EVENT_BUS.post(teraEvent);
-                event.setEffectiveness(teraEvent.getEffectiveness());
+                if (!teraEvent.isCanceled()) {
+
+                    event.setEffectiveness(teraEvent.getEffectiveness());
+
+                }
 
             } else if (DamageHelpers.dealsNotVeryEffectiveDamage(teraType, attack, target, user)) {
 
                 TeraAttackEffectivenessEvent teraEvent = new TeraAttackEffectivenessEvent(userOwner, victimOwner, user, target, Effectiveness.Not);
                 MinecraftForge.EVENT_BUS.post(teraEvent);
-                event.setEffectiveness(teraEvent.getEffectiveness());
+                if (!teraEvent.isCanceled()) {
+
+                    event.setEffectiveness(teraEvent.getEffectiveness());
+
+                }
 
             } else {
 
                 TeraAttackEffectivenessEvent teraEvent = new TeraAttackEffectivenessEvent(userOwner, victimOwner, user, target, Effectiveness.Normal);
                 MinecraftForge.EVENT_BUS.post(teraEvent);
-                event.setEffectiveness(teraEvent.getEffectiveness());
+                if (!teraEvent.isCanceled()) {
+
+                    event.setEffectiveness(teraEvent.getEffectiveness());
+
+                }
 
             }
 
