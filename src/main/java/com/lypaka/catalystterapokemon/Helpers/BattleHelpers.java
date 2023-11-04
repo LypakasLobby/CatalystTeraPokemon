@@ -5,6 +5,7 @@ import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.battles.attacks.Attack;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.BattleParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
 import com.pixelmonmod.pixelmon.items.heldItems.MegaStoneItem;
 import com.pixelmonmod.pixelmon.items.heldItems.ZCrystalItem;
@@ -33,6 +34,71 @@ public class BattleHelpers {
         }
 
         return null;
+
+    }
+
+    public static boolean isPokemonTryingToTeraSamePokemonFromCommand (ServerPlayerEntity player, Pokemon pokemon, BattleController bc) {
+
+        boolean same = false;
+        for (PixelmonWrapper activePokemon : bc.getActivePokemon()) {
+
+            if (activePokemon.getPlayerOwner() != null) {
+
+                ServerPlayerEntity owner = activePokemon.getPlayerOwner();
+                if (owner.getUniqueID().toString().equalsIgnoreCase(player.getUniqueID().toString())) {
+
+                    if (isPokemonSame(activePokemon, pokemon)) {
+
+                        same = true;
+                        break;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return same;
+
+    }
+
+    private static boolean isPokemonSame (PixelmonWrapper wrapper, Pokemon pokemon) {
+
+        boolean same = false;
+        Pokemon wrapperPokemon = wrapper.pokemon;
+        boolean canWrapperTera = NBTHelpers.canPokemonTera(wrapperPokemon);
+        boolean canPokemonTera = NBTHelpers.canPokemonTera(pokemon);
+        if (canWrapperTera && canPokemonTera) {
+
+            String wrapperTeraType = NBTHelpers.getTeraType(wrapperPokemon);
+            String pokemonTeraType = NBTHelpers.getTeraType(pokemon);
+            if (wrapperTeraType.equalsIgnoreCase(pokemonTeraType)) {
+
+                if (wrapperPokemon.getSpecies() == pokemon.getSpecies()) {
+
+                    if (wrapperPokemon.getForm() == pokemon.getForm()) {
+
+                        if (wrapperPokemon.getPokemonLevel() == pokemon.getPokemonLevel()) {
+
+                            if (wrapperPokemon.getNature() == pokemon.getNature()) {
+
+                                same = true;
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return same;
 
     }
 

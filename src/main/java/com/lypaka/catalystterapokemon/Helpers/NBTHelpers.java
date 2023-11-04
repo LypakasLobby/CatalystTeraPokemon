@@ -73,6 +73,12 @@ public class NBTHelpers {
 
     }
 
+    public static boolean canPokemonTera (Pokemon pokemon) {
+
+        return !getTeraType(pokemon).equalsIgnoreCase("");
+
+    }
+
     public static String getProperName (String teraType) {
 
         return teraType.substring(0, 1).toUpperCase() + teraType.substring(1);

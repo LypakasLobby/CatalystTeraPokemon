@@ -14,6 +14,7 @@ import com.pixelmonmod.pixelmon.api.storage.PlayerPartyStorage;
 import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -82,6 +83,12 @@ public class TerastallizeCommand {
                                                                                 if (BattleRegistry.getBattle(player) != null) {
 
                                                                                     BattleController bc = BattleRegistry.getBattle(player);
+                                                                                    if (!BattleHelpers.isPokemonTryingToTeraSamePokemonFromCommand(player, pokemon, bc)) {
+
+                                                                                        player.sendMessage(FancyText.getFormattedText("&cYou're trying to Tera a Pokemon not currently active in the battle!"), player.getUniqueID());
+                                                                                        return 1;
+
+                                                                                    }
                                                                                     TeraBattle teraBattle = BattleHelpers.getTeraBattleFromPlayer(player);
                                                                                     if (teraBattle == null) {
 
