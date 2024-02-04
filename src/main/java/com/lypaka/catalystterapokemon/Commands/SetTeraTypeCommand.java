@@ -62,7 +62,7 @@ public class SetTeraTypeCommand {
                                                                                         int currentChanges = NBTHelpers.getTeraCount(pokemon);
                                                                                         if (currentChanges < ConfigGetters.maxTypeChanges) {
 
-                                                                                            NBTHelpers.setTeraType(pokemon, type);
+                                                                                            NBTHelpers.setTeraType(pokemon, type, true);
                                                                                             player.sendMessage(FancyText.getFormattedText("&aSuccessfully set " + pokemon.getSpecies().getName() + "'s Tera Type to " + type + "!"), player.getUniqueID());
                                                                                             return 1;
 

@@ -3,7 +3,6 @@ package com.lypaka.catalystterapokemon.Commands;
 import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
 import com.lypaka.catalystterapokemon.ConfigGetters;
 import com.lypaka.catalystterapokemon.Helpers.DamageHelpers;
-import com.lypaka.catalystterapokemon.Helpers.MiscHelpers;
 import com.lypaka.catalystterapokemon.Raids.RaidRegistry;
 import com.lypaka.catalystterapokemon.TeraItems.TeraItemUtils;
 import com.lypaka.lypakautils.FancyText;
@@ -44,8 +43,6 @@ public class ReloadCommand {
 
                                                     CatalystTeraPokemon.configManager.load();
                                                     ConfigGetters.load(true);
-                                                    MiscHelpers.setRibbonData();
-                                                    MiscHelpers.loadRibbon();
                                                     DamageHelpers.loadTypeEffectivenessMaps();
                                                     TeraItemUtils.loadShards();
                                                     RaidRegistry.loadRaids();

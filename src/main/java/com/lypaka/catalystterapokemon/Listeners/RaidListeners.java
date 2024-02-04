@@ -168,7 +168,7 @@ public class RaidListeners {
 
             }
 
-            NBTHelpers.setTeraType(pokemon, selectedType);
+            NBTHelpers.setTeraType(pokemon, selectedType, true);
             NBTHelpers.setTerastallized(pokemon, true);
             pokemonToPokemonMap.put(event.getRaidParticipant(), raidPokemon);
 

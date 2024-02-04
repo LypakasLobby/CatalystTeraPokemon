@@ -33,7 +33,7 @@ public class PokemonAcquireListeners {
                     MinecraftForge.EVENT_BUS.post(setEvent);
                     if (!setEvent.isCanceled()) {
 
-                        NBTHelpers.setTeraType(pokemon, setEvent.getTeraType());
+                        NBTHelpers.setTeraType(pokemon, setEvent.getTeraType(), true);
 
                     }
 
@@ -52,7 +52,7 @@ public class PokemonAcquireListeners {
                 MinecraftForge.EVENT_BUS.post(setEvent);
                 if (!setEvent.isCanceled()) {
 
-                    NBTHelpers.setTeraType(pokemon, setEvent.getTeraType());
+                    NBTHelpers.setTeraType(pokemon, setEvent.getTeraType(), true);
 
                 }
 
@@ -84,7 +84,7 @@ public class PokemonAcquireListeners {
                     MinecraftForge.EVENT_BUS.post(setEvent);
                     if (!setEvent.isCanceled()) {
 
-                        NBTHelpers.setTeraType(pokemon, setEvent.getTeraType());
+                        NBTHelpers.setTeraType(pokemon, setEvent.getTeraType(), true);
 
                     }
 

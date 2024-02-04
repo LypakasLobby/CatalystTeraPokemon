@@ -2,7 +2,6 @@ package com.lypaka.catalystterapokemon.Listeners;
 
 import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
 import com.lypaka.catalystterapokemon.Helpers.DamageHelpers;
-import com.lypaka.catalystterapokemon.Helpers.MiscHelpers;
 import com.lypaka.catalystterapokemon.Raids.RaidRegistry;
 import com.lypaka.catalystterapokemon.TeraItems.TeraItemUtils;
 import com.pixelmonmod.pixelmon.Pixelmon;
@@ -33,8 +32,6 @@ public class ServerStartedListener {
         Pixelmon.EVENT_BUS.register(new RaidListeners());
         Pixelmon.EVENT_BUS.register(new RetrieveListener());
 
-        MiscHelpers.setRibbonData();
-        MiscHelpers.loadRibbon();
         DamageHelpers.loadTypeEffectivenessMaps();
         TeraItemUtils.loadShards();
         RaidRegistry.loadRaids();

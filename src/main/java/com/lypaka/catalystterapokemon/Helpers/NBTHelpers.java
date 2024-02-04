@@ -27,10 +27,10 @@ public class NBTHelpers {
 
     }
 
-    public static void setTeraType (Pokemon pokemon, String type) {
+    public static void setTeraType (Pokemon pokemon, String type, boolean updateCount) {
 
         pokemon.getPersistentData().putString("TeraType", type);
-        addTeraCount(pokemon);
+        if (updateCount) addTeraCount(pokemon);
 
     }
 
@@ -47,15 +47,6 @@ public class NBTHelpers {
     public static void setTerastallized (Pokemon pokemon, boolean value) {
 
         pokemon.getPersistentData().putBoolean("Terastallized", value);
-        if (value) {
-
-            pokemon.addRibbon(MiscHelpers.teraRibbon, true);
-
-        } else {
-
-            pokemon.removeRibbon(MiscHelpers.teraRibbon);
-
-        }
 
     }
 

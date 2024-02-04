@@ -109,7 +109,7 @@ public class InteractionListener {
             if (!shardEvent.isCanceled()) {
 
                 player.getHeldItem(Hand.MAIN_HAND).setCount(player.getHeldItem(Hand.MAIN_HAND).getCount() - 1);
-                NBTHelpers.setTeraType(pokemon, type);
+                NBTHelpers.setTeraType(pokemon, type, true);
                 player.sendMessage(FancyText.getFormattedText("&eSuccessfully set " + pokemon.getSpecies().getName() + "'s Tera Type to " + type + "!"), player.getUniqueID());
 
             }
