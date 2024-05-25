@@ -7,6 +7,7 @@ import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.catalystterapokemon.Raids.RaidRegistry;
 import com.lypaka.catalystterapokemon.Raids.TeraRaid;
 import com.lypaka.catalystterapokemon.Raids.TeraRaidPokemon;
+import com.lypaka.lypakautils.WorldStuff.WorldMap;
 import com.pixelmonmod.pixelmon.api.events.battles.BattleTickEvent;
 import com.pixelmonmod.pixelmon.api.events.raids.EndRaidEvent;
 import com.pixelmonmod.pixelmon.api.events.raids.RandomizeRaidEvent;
@@ -36,7 +37,8 @@ public class RaidListeners {
     public void onRaidRandomize (RandomizeRaidEvent.ChooseSpecies event) {
 
         DenEntity den = event.den;
-        String location = ((ServerWorldInfo) den.world.getWorldInfo()).getWorldName() + "," + den.getPosition().getX() + "," + den.getPosition().getY() + "," + den.getPosition().getZ();
+        String worldName = WorldMap.getWorldName(den.world);
+        String location = worldName + "," + den.getPosition().getX() + "," + den.getPosition().getY() + "," + den.getPosition().getZ();
         List<TeraRaid> possibleRaids = new ArrayList<>();
         for (Map.Entry<String, TeraRaid> entry : RaidRegistry.raidMap.entrySet()) {
 

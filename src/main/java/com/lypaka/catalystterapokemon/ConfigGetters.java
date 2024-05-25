@@ -3,6 +3,7 @@ package com.lypaka.catalystterapokemon;
 import com.google.common.reflect.TypeToken;
 import ninja.leaping.configurate.objectmapping.ObjectMappingException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,10 +11,12 @@ public class ConfigGetters {
 
     public static boolean onlyAllowOTUUID;
     public static boolean allowParticles;
+    public static boolean allowPlayerVSPlayerTera;
     public static boolean allowOutsideTera;
     public static int cost;
     public static int maxCharges;
     public static int maxTypeChanges;
+    public static List<String> npcBlacklist;
     public static List<String> teraRaids;
     public static int resetCost;
     public static boolean starterCanHaveTera;
@@ -34,12 +37,37 @@ public class ConfigGetters {
 
     public static void load (boolean reload) throws ObjectMappingException {
 
+        boolean save = false;
         onlyAllowOTUUID = CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Only-OT-UUID").getBoolean();
         allowParticles = CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Particles").getBoolean();
+        if (CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Player-VS-Player-Tera").isVirtual()) {
+
+            allowPlayerVSPlayerTera = true;
+            CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Player-VS-Player-Tera").setComment("If false, will not allow players to use Tera in battles against other players");
+            CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Player-VS-Player-Tera").setValue(true);
+            save = true;
+
+        } else {
+
+            allowPlayerVSPlayerTera = CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Player-VS-Player-Tera").getBoolean();
+
+        }
         allowOutsideTera = CatalystTeraPokemon.configManager.getConfigNode(0, "Allow-Outside-Tera").getBoolean();
         cost = CatalystTeraPokemon.configManager.getConfigNode(0, "Cost").getInt();
         maxCharges = CatalystTeraPokemon.configManager.getConfigNode(0, "Max-Charges").getInt();
         maxTypeChanges = CatalystTeraPokemon.configManager.getConfigNode(0, "Max-Type-Changes").getInt();
+        if (CatalystTeraPokemon.configManager.getConfigNode(0, "NPC-Blacklist").isVirtual()) {
+
+            npcBlacklist = new ArrayList<>();
+            CatalystTeraPokemon.configManager.getConfigNode(0, "NPC-Blacklist").setValue(npcBlacklist);
+            CatalystTeraPokemon.configManager.getConfigNode(0, "NPC-Blacklist").setComment("NPCs players can't use Tera against, in \"world,x,y,z\" format");
+            if (!save) save = true;
+
+        } else {
+
+            npcBlacklist = CatalystTeraPokemon.configManager.getConfigNode(0, "NPC-Blacklist").getList(TypeToken.of(String.class));
+
+        }
         teraRaids = CatalystTeraPokemon.configManager.getConfigNode(0, "Raids").getList(TypeToken.of(String.class));
         resetCost = CatalystTeraPokemon.configManager.getConfigNode(0, "Reset-Cost").getInt();
         starterCanHaveTera = CatalystTeraPokemon.configManager.getConfigNode(0, "Starter-Can-Have-Tera").getBoolean();
@@ -59,6 +87,11 @@ public class ConfigGetters {
         if (!reload) {
 
             playerCharges = CatalystTeraPokemon.configManager.getConfigNode(2, "Charges").getValue(new TypeToken<Map<String, Integer>>() {});
+
+        }
+        if (save) {
+
+            CatalystTeraPokemon.configManager.save();
 
         }
 

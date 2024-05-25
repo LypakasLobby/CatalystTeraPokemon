@@ -6,6 +6,7 @@ import com.lypaka.catalystterapokemon.Helpers.BattleHelpers;
 import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.catalystterapokemon.TeraBattle;
 import com.lypaka.lypakautils.FancyText;
+import com.lypaka.lypakautils.MiscHandlers.WorldHelpers;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -15,6 +16,9 @@ import com.pixelmonmod.pixelmon.api.storage.StorageProxy;
 import com.pixelmonmod.pixelmon.battles.BattleRegistry;
 import com.pixelmonmod.pixelmon.battles.controller.BattleController;
 import com.pixelmonmod.pixelmon.battles.controller.participants.PixelmonWrapper;
+import com.pixelmonmod.pixelmon.battles.controller.participants.PlayerParticipant;
+import com.pixelmonmod.pixelmon.battles.controller.participants.TrainerParticipant;
+import com.pixelmonmod.pixelmon.entities.npcs.NPCTrainer;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.ISuggestionProvider;
@@ -83,6 +87,40 @@ public class TerastallizeCommand {
                                                                                 if (BattleRegistry.getBattle(player) != null) {
 
                                                                                     BattleController bc = BattleRegistry.getBattle(player);
+                                                                                    if (bc.participants.get(0) instanceof PlayerParticipant && bc.participants.get(1) instanceof PlayerParticipant) {
+
+                                                                                        if (!ConfigGetters.allowPlayerVSPlayerTera) {
+
+                                                                                            player.sendMessage(FancyText.getFormattedText("&cYou cannot use Terastallization against other players!"), player.getUniqueID());
+                                                                                            return 1;
+
+                                                                                        }
+
+                                                                                    } else if (bc.participants.get(0) instanceof PlayerParticipant && bc.participants.get(1) instanceof TrainerParticipant) {
+
+                                                                                        TrainerParticipant tp = (TrainerParticipant) bc.participants.get(1);
+                                                                                        NPCTrainer trainer = tp.trainer;
+                                                                                        String location = WorldHelpers.getEntityLocation(trainer);
+                                                                                        if (ConfigGetters.npcBlacklist.contains(location)) {
+
+                                                                                            player.sendMessage(FancyText.getFormattedText("&cYou cannot use Terastallization against this NPC!"), player.getUniqueID());
+                                                                                            return 1;
+
+                                                                                        }
+
+                                                                                    } else if (bc.participants.get(1) instanceof PlayerParticipant && bc.participants.get(0) instanceof TrainerParticipant) {
+
+                                                                                        TrainerParticipant tp = (TrainerParticipant) bc.participants.get(0);
+                                                                                        NPCTrainer trainer = tp.trainer;
+                                                                                        String location = WorldHelpers.getEntityLocation(trainer);
+                                                                                        if (ConfigGetters.npcBlacklist.contains(location)) {
+
+                                                                                            player.sendMessage(FancyText.getFormattedText("&cYou cannot use Terastallization against this NPC!"), player.getUniqueID());
+                                                                                            return 1;
+
+                                                                                        }
+
+                                                                                    }
                                                                                     if (!BattleHelpers.isPokemonTryingToTeraSamePokemonFromCommand(player, pokemon, bc)) {
 
                                                                                         player.sendMessage(FancyText.getFormattedText("&cYou're trying to Tera a Pokemon not currently active in the battle!"), player.getUniqueID());

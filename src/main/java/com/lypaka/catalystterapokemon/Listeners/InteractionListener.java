@@ -6,6 +6,7 @@ import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.catalystterapokemon.TeraItems.TeraItemUtils;
 import com.lypaka.catalystterapokemon.TeraItems.TeraShard;
 import com.lypaka.lypakautils.FancyText;
+import com.lypaka.lypakautils.WorldStuff.WorldMap;
 import com.pixelmonmod.pixelmon.api.events.raids.DenEvent;
 import com.pixelmonmod.pixelmon.api.pokemon.Pokemon;
 import com.pixelmonmod.pixelmon.entities.pixelmon.PixelmonEntity;
@@ -36,7 +37,7 @@ public class InteractionListener {
                 if (e.toString().equalsIgnoreCase(uuid.toString())) {
 
                     event.setCanceled(true);
-                    String world = ((ServerWorldInfo) event.getDen().world.getWorldInfo()).getWorldName();
+                    String world = WorldMap.getWorldName(event.getDen().world);
                     int x = event.getDen().getPosition().getX();
                     int y = event.getDen().getPosition().getY();
                     int z = event.getDen().getPosition().getZ();
