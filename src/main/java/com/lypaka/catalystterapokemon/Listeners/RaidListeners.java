@@ -3,6 +3,7 @@ package com.lypaka.catalystterapokemon.Listeners;
 import com.lypaka.catalystterapokemon.API.Raids.EndTeraRaidEvent;
 import com.lypaka.catalystterapokemon.API.Raids.StartTeraRaidEvent;
 import com.lypaka.catalystterapokemon.CatalystTeraPokemon;
+import com.lypaka.catalystterapokemon.ConfigGetters;
 import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.catalystterapokemon.Raids.RaidRegistry;
 import com.lypaka.catalystterapokemon.Raids.TeraRaid;
@@ -36,6 +37,7 @@ public class RaidListeners {
     @SubscribeEvent
     public void onRaidRandomize (RandomizeRaidEvent.ChooseSpecies event) {
 
+        if (!ConfigGetters.hasTeraRaids) return;
         DenEntity den = event.den;
         String worldName = WorldMap.getWorldName(den.world);
         String location = worldName + "," + den.getPosition().getX() + "," + den.getPosition().getY() + "," + den.getPosition().getZ();
@@ -115,6 +117,7 @@ public class RaidListeners {
     @SubscribeEvent // this is absolutely necessary for the Pokemon to be Tera'd
     public void onRaidStart (StartRaidEvent event) {
 
+        if (!ConfigGetters.hasTeraRaids) return;
         DenEntity den = event.getDen();
         if (raidPokemonMap.containsKey(den.getUniqueID())) {
 
@@ -181,6 +184,7 @@ public class RaidListeners {
     @SubscribeEvent
     public void onBattleTick (BattleTickEvent event) {
 
+        if (!ConfigGetters.hasTeraRaids) return;
         if (event.getBattleController().isRaid()) {
 
             for (BattleParticipant bp : event.getBattleController().participants) {
@@ -243,6 +247,7 @@ public class RaidListeners {
     @SubscribeEvent
     public void onRaidEnd (EndRaidEvent event) {
 
+        if (!ConfigGetters.hasTeraRaids) return;
         UUID uuid = event.getRaid().getDenEntity(event.getRaidParticipant().getEntity().world).get().getUniqueID();
         if (raidMap.containsKey(uuid)) {
 

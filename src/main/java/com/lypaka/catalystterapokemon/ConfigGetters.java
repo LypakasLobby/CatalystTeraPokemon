@@ -24,6 +24,7 @@ public class ConfigGetters {
     public static Map<String, List<String>> teraBlacklist;
     public static double teraChance;
     public static Map<String, String> particleColors;
+    public static List<String> worldBlacklist;
 
     public static String orbDisplayName;
     public static String orbID;
@@ -34,6 +35,8 @@ public class ConfigGetters {
     public static Map<String, Map<String, String>> shardItems;
 
     public static Map<String, Integer> playerCharges;
+
+    public static boolean hasTeraRaids = false;
 
     public static void load (boolean reload) throws ObjectMappingException {
 
@@ -69,13 +72,25 @@ public class ConfigGetters {
 
         }
         teraRaids = CatalystTeraPokemon.configManager.getConfigNode(0, "Raids").getList(TypeToken.of(String.class));
+        if (!teraRaids.isEmpty()) hasTeraRaids = true;
         resetCost = CatalystTeraPokemon.configManager.getConfigNode(0, "Reset-Cost").getInt();
         starterCanHaveTera = CatalystTeraPokemon.configManager.getConfigNode(0, "Starter-Can-Have-Tera").getBoolean();
         spawnOnlyTera = CatalystTeraPokemon.configManager.getConfigNode(0, "Spawn-Only").getBoolean();
         teraBlacklist = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Blacklist").getValue(new TypeToken<Map<String, List<String>>>() {});
         teraChance = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Chance").getDouble();
         particleColors = CatalystTeraPokemon.configManager.getConfigNode(0, "Tera-Colors").getValue(new TypeToken<Map<String, String>>() {});
+        worldBlacklist = new ArrayList<>();
+        if (CatalystTeraPokemon.configManager.getConfigNode(0, "World-Blacklist").isVirtual()) {
 
+            if (!save) save = true;
+            CatalystTeraPokemon.configManager.getConfigNode(0, "World-Blacklist").setValue(worldBlacklist);
+            CatalystTeraPokemon.configManager.getConfigNode(0, "World-Blacklist").setComment("A master on/off blacklist for Terastallization in designated worlds");
+
+        } else {
+
+            worldBlacklist = CatalystTeraPokemon.configManager.getConfigNode(0, "World-Blacklist").getList(TypeToken.of(String.class));
+
+        }
         orbDisplayName = CatalystTeraPokemon.configManager.getConfigNode(1, "Orb", "Display-Name").getString();
         orbID = CatalystTeraPokemon.configManager.getConfigNode(1, "Orb", "ID").getString();
         orbLore = CatalystTeraPokemon.configManager.getConfigNode(1, "Orb", "Lore").getList(TypeToken.of(String.class));

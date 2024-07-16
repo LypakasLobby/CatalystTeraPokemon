@@ -34,6 +34,15 @@ public class NBTHelpers {
 
     }
 
+    public static void clearTeraType (Pokemon pokemon) {
+
+        if (!pokemon.getPersistentData().contains("TeraType")) return;
+        pokemon.getPersistentData().remove("TeraType");
+        if (!pokemon.getPersistentData().contains("Terastallized")) return;
+        pokemon.getPersistentData().remove("Terastallized");
+
+    }
+
     public static void clearTeraCount (Pokemon pokemon) {
 
         if (pokemon.getPersistentData().contains("TeraCount")) {

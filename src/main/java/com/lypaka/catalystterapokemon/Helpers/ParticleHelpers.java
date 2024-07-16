@@ -10,13 +10,21 @@ public class ParticleHelpers {
 
         String teraType = NBTHelpers.getTeraType(pokemon);
         RedstoneParticleData data = null;
-        if (ConfigGetters.particleColors.containsKey(teraType)) {
+        try {
 
-            String[] rgb = ConfigGetters.particleColors.get(teraType).split(", ");
-            float r = Float.parseFloat(rgb[0]) / 1000;
-            float g = Float.parseFloat(rgb[1]) / 1000;
-            float b = Float.parseFloat(rgb[2]) / 1000;
-            data = new RedstoneParticleData(r, g, b, 1.0f);
+            if (ConfigGetters.particleColors.containsKey(teraType)) {
+
+                String[] rgb = ConfigGetters.particleColors.get(teraType).split(", ");
+                float r = Float.parseFloat(rgb[0]) / 1000;
+                float g = Float.parseFloat(rgb[1]) / 1000;
+                float b = Float.parseFloat(rgb[2]) / 1000;
+                data = new RedstoneParticleData(r, g, b, 1.0f);
+
+            }
+
+        } catch (NullPointerException er) {
+
+
 
         }
 

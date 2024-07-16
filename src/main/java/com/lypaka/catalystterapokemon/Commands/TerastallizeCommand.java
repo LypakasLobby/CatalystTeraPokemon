@@ -7,6 +7,7 @@ import com.lypaka.catalystterapokemon.Helpers.NBTHelpers;
 import com.lypaka.catalystterapokemon.TeraBattle;
 import com.lypaka.lypakautils.FancyText;
 import com.lypaka.lypakautils.MiscHandlers.WorldHelpers;
+import com.lypaka.lypakautils.WorldStuff.WorldMap;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
@@ -50,6 +51,17 @@ public class TerastallizeCommand {
                                                                 if (c.getSource().getEntity() instanceof ServerPlayerEntity) {
 
                                                                     ServerPlayerEntity player = (ServerPlayerEntity) c.getSource().getEntity();
+                                                                    if (!ConfigGetters.worldBlacklist.isEmpty()) {
+
+                                                                        String worldName = WorldMap.getWorldName(player);
+                                                                        if (ConfigGetters.worldBlacklist.contains(worldName)) {
+
+                                                                            player.sendMessage(FancyText.getFormattedText("&cYou cannot use Terastallization in this world!"), player.getUniqueID());
+                                                                            return 0;
+
+                                                                        }
+
+                                                                    }
                                                                     int slot = IntegerArgumentType.getInteger(c, "slot") - 1;
                                                                     PlayerPartyStorage storage = StorageProxy.getParty(player);
                                                                     Pokemon pokemon = storage.get(slot);
